@@ -1,7 +1,11 @@
+import { DashboardLayout } from '../components/DeashboardLayout.tsx';
+
 const Home: React.FC = () => {
   return (
     <>
-      <h1>sdadas</h1>
+      <DashboardLayout name="clinic" titlePage="Clínica">
+        <div>sasdadas</div>
+      </DashboardLayout>
     </>
   );
 };
