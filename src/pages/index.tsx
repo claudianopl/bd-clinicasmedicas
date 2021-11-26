@@ -1,7 +1,9 @@
+import Clinicas from '../components/Clinicas';
+
 const Home: React.FC = () => {
   return (
     <>
-      <h1>sdadas</h1>
+      <Clinicas />
     </>
   );
 };
