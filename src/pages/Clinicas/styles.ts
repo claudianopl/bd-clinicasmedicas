@@ -9,8 +9,10 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: ${props => props.theme.colors.background};
-  max-width: 1380px;
+  max-width: 1390px;
   padding: 5px;
 `;
 

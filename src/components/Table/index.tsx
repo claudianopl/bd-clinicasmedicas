@@ -1,19 +1,16 @@
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  Box,
-} from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Box } from '@chakra-ui/react';
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
+import { Spinner } from '@chakra-ui/react';
 import theme from '../../styles/theme';
-import { Container } from './styles';
+import {
+  TableFooter,
+  Container,
+  ButtonFlexWrapper,
+  ButtonWrapper,
+} from './styles';
 
-interface user {
+interface userTypeProps {
   id: string;
   name: string;
   address: string;
@@ -21,71 +18,72 @@ interface user {
   email: string;
 }
 
-export function TableComponent(): JSX.Element {
-  const tableColumnValues = [
-    'Código',
-    'Nome',
-    'Endereço',
-    'Telefone',
-    'E-mail',
-  ];
+interface tableComponentProps {
+  userProps: string[];
+  userColumnValues: string[];
+  receivedUserData: userTypeProps[];
+}
 
-  const userProps = ['id', 'name', 'address', 'phone', 'email'];
+export function TableComponent({
+  receivedUserData,
+  userProps,
+  userColumnValues,
+}: tableComponentProps): JSX.Element {
+  const [itemOffset, setItemOffset] = useState(null);
+  const [currentItemsInPage, setCurrentItemsInPage] = useState([]);
 
-  const usersData = [
-    {
-      id: '123213',
-      name: 'marcos',
-      address: 'da puta quiu pariu',
-      phone: '12313313213',
-      email: 'marcosninja@gmail.com',
-    },
-    {
-      id: '321798321',
-      name: 'craudio',
-      address: 'CU rado',
-      phone: '32423213',
-      email: 'Craudioninja@gmail.com',
-    },
-    {
-      id: '23131213',
-      name: 'jessy',
-      address: 'jão carlos',
-      phone: '23213421',
-      email: 'jessycarla@gmail.com',
-    },
-    {
-      id: '7687876',
-      name: 'carla',
-      address: 'rua dos loucos',
-      phone: '66342344',
-      email: 'carlacruz@gmail.com',
-    },
-  ];
-
-  const [users, setUsers] = useState<user[]>([]);
-  const [tableColumn, setTableColumn] = useState<string[]>([]);
+  const usersPerPage = 4;
+  const maxNumberOfPages = Math.ceil(receivedUserData.length / usersPerPage);
+  const firstPage = 1;
+  const howManyDisplayedButtons = 5;
+  const maxFirst = Math.max(
+    maxNumberOfPages - (howManyDisplayedButtons - 1),
+    1
+  );
+  const currentPage = itemOffset ? itemOffset / usersPerPage + 1 : 1;
+  const pressedButtonDisplayedAtMiddle = (howManyDisplayedButtons - 1) / 2;
+  const first = Math.min(
+    Math.max(currentPage - pressedButtonDisplayedAtMiddle, 1),
+    maxFirst
+  ); // garante que a paginação da esquerda nunca será negativa
 
   useEffect(() => {
-    setUsers(usersData);
-    setTableColumn(tableColumnValues);
-    console.log(users);
-  }, []);
+    async function setData(): Promise<void> {
+      const endOffset = itemOffset + usersPerPage;
+      setCurrentItemsInPage(receivedUserData.slice(itemOffset, endOffset));
+    }
+    setData();
+  }, [itemOffset, receivedUserData]);
+
+  function handleOnPageChange(page): void {
+    setItemOffset((page - 1) * usersPerPage);
+  }
+
+  function handlePageSkipChange(page): void {
+    const smallerThanMaxNumberOfPages = page - 1 < maxNumberOfPages;
+    const greaterThanOne = page >= 1;
+
+    console.log(greaterThanOne);
+    console.log(page);
+    if (smallerThanMaxNumberOfPages && greaterThanOne) {
+      setItemOffset((page - 1) * usersPerPage);
+    }
+  }
 
   return (
     <Container>
-      <Box w="100%" borderRadius="36px">
+      <Box width="1380px" borderRadius="36px">
         <Table
+          width="100%"
           background={`${theme.colors.aquaMarine}`}
           variant="simple"
           boxShadow="0 3px 6px 0 rgba(0, 0, 0, 0.16)"
           borderRadius="8px"
           paddingTop="1rem"
         >
-          <TableCaption>Imperial to metric conversion factors</TableCaption>
           <Thead height="80px">
             <Tr>
-              {tableColumn.map(TableItem => (
+              {userColumnValues.map(TableItem => (
                 <Th
                   textTransform="capitalize"
                   fontSize="20px"
@@ -99,10 +97,13 @@ export function TableComponent(): JSX.Element {
             </Tr>
           </Thead>
           <Tbody>
-            {users.map((item, index) => (
-              <Tr key={item.id}>
+            {Array.from({ length: usersPerPage }).map((_, index) => (
+              <Tr key={userProps[index]}>
                 {userProps.map(props => (
                   <Th
+                    height="81px"
+                    paddingTop="32px"
+                    paddingBottom="32px"
                     textTransform="none"
                     background="white"
                     fontFamily="Nunito"
@@ -110,15 +111,63 @@ export function TableComponent(): JSX.Element {
                     fontSize="20px"
                     color={`${theme.colors.black}`}
                   >
-                    {users[index][props]}
+                    {currentItemsInPage[index]
+                      ? currentItemsInPage[index][props]
+                      : null}
                   </Th>
                 ))}
               </Tr>
             ))}
           </Tbody>
         </Table>
-        ;
       </Box>
+      <TableFooter>
+        <ButtonFlexWrapper>
+          <button
+            type="button"
+            onClick={() => handlePageSkipChange(currentPage - 1)}
+          >
+            <HiChevronLeft
+              size={30}
+              color={
+                currentPage === firstPage
+                  ? `${theme.colors.paleGrey}`
+                  : `${theme.colors.steelGrey}`
+              }
+            />
+          </button>
+          {Array.from({
+            length: Math.min(howManyDisplayedButtons, maxNumberOfPages),
+          })
+            .map((_, index) => index + first)
+            .map(page => (
+              <ButtonWrapper>
+                <button
+                  type="button"
+                  onClick={e => handleOnPageChange(page)}
+                  className={
+                    page === currentPage ? 'paginationItemActive' : null
+                  } // a tratar
+                >
+                  {page}
+                </button>
+              </ButtonWrapper>
+            ))}
+          <button
+            type="button"
+            onClick={() => handlePageSkipChange(currentPage + 1)}
+          >
+            <HiChevronRight
+              size={30}
+              color={
+                currentPage === maxNumberOfPages
+                  ? `${theme.colors.paleGrey}`
+                  : `${theme.colors.steelGrey}`
+              }
+            />
+          </button>
+        </ButtonFlexWrapper>
+      </TableFooter>
     </Container>
   );
 }
