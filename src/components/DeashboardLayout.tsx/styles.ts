@@ -10,6 +10,7 @@ interface ContainerProps {
 
 export const Header = styled.div`
   background-color: ${props => props.theme.colors.white};
+  width: 100%;
   height: 9.0625rem;
   padding: 2.1875rem 3.375rem 2.125rem 4.75rem;
   box-shadow: 0 1px 6px 0 rgba(39, 39, 39, 0.2);
