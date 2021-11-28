@@ -79,7 +79,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </GridItem>
           <GridItem
             display={{ sm: 'none', md: 'none', lg: 'grid' }}
-            colSpan={{ lg: 5 }}
+            colSpan={{ lg: 4 }}
             marginRight="4vw"
           >
             <ContainerSearch w="auto" alignItems="center">
@@ -103,7 +103,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </Box>
             </ContainerSearch>
           </GridItem>
-          <GridItem colSpan={{ sm: 5, md: 5, lg: 2 }} marginRight="3vw">
+          <GridItem colSpan={{ sm: 5, md: 5, lg: 3 }} marginRight="3vw">
             <Flex h="100%" w="100%" justifyContent="end" alignItems="center">
               <ButtonComponents
                 maxW="294px"
@@ -153,6 +153,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             bmMenuWrap: {
               boxShadow: '2px 3px 6px 0 rgba(39, 39, 39, 0.2)',
               background: 'white',
+              height: 'calc(100% - 135.94px)',
               marginTop: '135.94px',
             },
           }}
@@ -200,12 +201,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </Nav>
               </Link>
 
-              <Link href="/">
-                <Nav mt="10rem">
-                  <IoMdExit size={30} />
-                  <a>Sair</a>
-                </Nav>
-              </Link>
+              <div style={{ marginBottom: 400 }}>
+                <Link href="/">
+                  <Nav mt="10rem">
+                    <IoMdExit size={30} />
+                    <a>Sair</a>
+                  </Nav>
+                </Link>
+              </div>
             </Flex>
           </Box>
         </Menu>
