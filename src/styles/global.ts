@@ -20,8 +20,8 @@
 //   }
 
 //   body {
-// background: ${props => props.theme.colors.background};
-// color: ${props => props.theme.colors.greyishBrown};
+//     background: var(--gray-900);
+//     color: var(--white);
 //   }
 
 //   body, input, textarea, select, button {
