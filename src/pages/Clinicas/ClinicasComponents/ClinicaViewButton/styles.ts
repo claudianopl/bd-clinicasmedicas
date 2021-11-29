@@ -23,6 +23,8 @@ export const Container = styled.div`
 
     transition: 0.7s;
 
+    outline: none;
+
     span {
       padding-left: 1rem;
       color: ${props => props.theme.colors.darkGreenBlue};

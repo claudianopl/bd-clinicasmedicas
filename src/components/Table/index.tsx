@@ -1,36 +1,40 @@
 import { Table, Thead, Tbody, Tr, Th, Box } from '@chakra-ui/react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
-import { Spinner } from '@chakra-ui/react';
 import theme from '../../styles/theme';
+
 import {
   TableFooter,
   Container,
   ButtonFlexWrapper,
-  ButtonWrapper,
+  FooterButtonsWrapper,
 } from './styles';
 
-interface userTypeProps {
+type userTypeProps = {
   id: string;
   name: string;
   address: string;
   phone: string;
   email: string;
-}
+};
 
 interface tableComponentProps {
   userProps: string[];
   userColumnValues: string[];
   receivedUserData: userTypeProps[];
+  handleClickedUser: (args: string) => void;
 }
 
 export function TableComponent({
   receivedUserData,
   userProps,
   userColumnValues,
+  handleClickedUser,
 }: tableComponentProps): JSX.Element {
   const [itemOffset, setItemOffset] = useState(null);
-  const [currentItemsInPage, setCurrentItemsInPage] = useState([]);
+  const [currentUsersInPage, setCurrentUsersInPage] = useState<userTypeProps[]>(
+    []
+  );
 
   const usersPerPage = 4;
   const maxNumberOfPages = Math.ceil(receivedUserData.length / usersPerPage);
@@ -47,10 +51,11 @@ export function TableComponent({
     maxFirst
   ); // garante que a paginação da esquerda nunca será negativa
 
+  const threeDotsAtEnd = '...';
   useEffect(() => {
     async function setData(): Promise<void> {
       const endOffset = itemOffset + usersPerPage;
-      setCurrentItemsInPage(receivedUserData.slice(itemOffset, endOffset));
+      setCurrentUsersInPage(receivedUserData.slice(itemOffset, endOffset));
     }
     setData();
   }, [itemOffset, receivedUserData]);
@@ -63,28 +68,34 @@ export function TableComponent({
     const smallerThanMaxNumberOfPages = page - 1 < maxNumberOfPages;
     const greaterThanOne = page >= 1;
 
-    console.log(greaterThanOne);
-    console.log(page);
     if (smallerThanMaxNumberOfPages && greaterThanOne) {
       setItemOffset((page - 1) * usersPerPage);
     }
   }
 
+  function refinedValue(userObject: string): string {
+    if (userObject.length > 26) {
+      return userObject.substring(0, 26) + threeDotsAtEnd;
+    }
+
+    return userObject;
+  }
+
   return (
     <Container>
-      <Box width="1380px" borderRadius="36px">
+      <Box width="100%">
         <Table
+          borderTopRadius="1rem"
           width="100%"
-          background={`${theme.colors.aquaMarine}`}
           variant="simple"
           boxShadow="0 3px 6px 0 rgba(0, 0, 0, 0.16)"
-          borderRadius="8px"
           paddingTop="1rem"
         >
           <Thead height="80px">
-            <Tr>
+            <Tr background={`${theme.colors.aquaMarine}`}>
               {userColumnValues.map(TableItem => (
                 <Th
+                  id="thRow"
                   textTransform="capitalize"
                   fontSize="20px"
                   fontWeight="bold"
@@ -98,22 +109,27 @@ export function TableComponent({
           </Thead>
           <Tbody>
             {Array.from({ length: usersPerPage }).map((_, index) => (
-              <Tr key={userProps[index]}>
+              <Tr id="thHoverFather">
                 {userProps.map(props => (
                   <Th
+                    id="thHoverChild"
+                    cursor="pointer"
+                    onClick={() =>
+                      handleClickedUser(currentUsersInPage[index].id)
+                    }
                     height="81px"
                     paddingTop="32px"
                     paddingBottom="32px"
                     textTransform="none"
-                    background="white"
                     fontFamily="Nunito"
                     fontWeight="bold"
                     fontSize="20px"
-                    color={`${theme.colors.black}`}
                   >
-                    {currentItemsInPage[index]
-                      ? currentItemsInPage[index][props]
-                      : null}
+                    {currentUsersInPage[index] ? (
+                      <div>
+                        {refinedValue(currentUsersInPage[index][props])}
+                      </div>
+                    ) : null}
                   </Th>
                 ))}
               </Tr>
@@ -141,8 +157,9 @@ export function TableComponent({
           })
             .map((_, index) => index + first)
             .map(page => (
-              <ButtonWrapper>
+              <FooterButtonsWrapper>
                 <button
+                  key={page}
                   type="button"
                   onClick={e => handleOnPageChange(page)}
                   className={
@@ -151,7 +168,7 @@ export function TableComponent({
                 >
                   {page}
                 </button>
-              </ButtonWrapper>
+              </FooterButtonsWrapper>
             ))}
           <button
             type="button"

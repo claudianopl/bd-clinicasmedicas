@@ -1,6 +1,22 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  #thHoverFather {
+    transition: 0.3s;
+
+    &:hover {
+      background-color: ${props => props.theme.colors.aquaMarine};
+      filter: brightness(0.99);
+    }
+  }
+
+  #thRow:first-child {
+    border-radius: 0.65rem 0 0 0;
+  }
+  #thRow:last-child {
+    border-radius: 0 0.65rem 0 0;
+  }
+`;
 export const TableFooter = styled.nav`
   display: flex;
   justify-content: center;
@@ -8,7 +24,7 @@ export const TableFooter = styled.nav`
 
   height: 79px;
   width: 100%;
-  margin-bottom: 15rem;
+  margin-bottom: 1.5rem;
 
   border-radius: 0px 0px 0.65rem 0.65rem;
 
@@ -35,7 +51,7 @@ export const ButtonFlexWrapper = styled.div`
   }
 `;
 
-export const ButtonWrapper = styled.div`
+export const FooterButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
 

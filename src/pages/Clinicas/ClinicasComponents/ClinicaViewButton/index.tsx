@@ -1,6 +1,4 @@
 import { ReactNode } from 'react';
-import { ImEye } from 'react-icons/im';
-import theme from '../../../../styles/theme';
 import { Container } from './styles';
 
 interface ButtonProps {
@@ -8,12 +6,16 @@ interface ButtonProps {
   onClickFunction: () => void;
   text: string;
 }
-export const Button = ({ icon, onClickFunction, text }: ButtonProps): any => {
+export const ClinicaViewButton = ({
+  icon,
+  onClickFunction,
+  text,
+}: ButtonProps): any => {
   return (
     <Container>
-      <button type="button">
+      <button type="button" onClick={onClickFunction}>
         {icon}
-        <span>Visualização</span>
+        <span>{text}</span>
       </button>
     </Container>
   );
