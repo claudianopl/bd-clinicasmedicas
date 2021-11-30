@@ -1,4 +1,4 @@
-import { Table, Thead, Tbody, Tr, Th, Box } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Box, Td, Spinner, Flex } from '@chakra-ui/react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import theme from '../../styles/theme';
@@ -19,17 +19,19 @@ type userTypeProps = {
 };
 
 interface tableComponentProps {
-  userProps: string[];
-  userColumnValues: string[];
-  receivedUserData: userTypeProps[];
-  handleClickedUser: (args: string) => void;
+  objectProps: string[];
+  headerTable: string[];
+  data: userTypeProps[];
+  handleOpenModal: (args: string) => void;
+  isLoading?: boolean;
 }
 
 export function TableComponent({
-  receivedUserData,
-  userProps,
-  userColumnValues,
-  handleClickedUser,
+  data,
+  objectProps,
+  headerTable,
+  handleOpenModal,
+  isLoading,
 }: tableComponentProps): JSX.Element {
   const [itemOffset, setItemOffset] = useState(null);
   const [currentUsersInPage, setCurrentUsersInPage] = useState<userTypeProps[]>(
@@ -37,7 +39,7 @@ export function TableComponent({
   );
 
   const usersPerPage = 4;
-  const maxNumberOfPages = Math.ceil(receivedUserData.length / usersPerPage);
+  const maxNumberOfPages = Math.ceil(data.length / usersPerPage);
   const firstPage = 1;
   const howManyDisplayedButtons = 5;
   const maxFirst = Math.max(
@@ -49,16 +51,17 @@ export function TableComponent({
   const first = Math.min(
     Math.max(currentPage - pressedButtonDisplayedAtMiddle, 1),
     maxFirst
-  ); // garante que a paginação da esquerda nunca será negativa
+  );
 
   const threeDotsAtEnd = '...';
   useEffect(() => {
-    async function setData(): Promise<void> {
-      const endOffset = itemOffset + usersPerPage;
-      setCurrentUsersInPage(receivedUserData.slice(itemOffset, endOffset));
-    }
     setData();
-  }, [itemOffset, receivedUserData]);
+  }, [itemOffset, data]);
+
+  async function setData(): Promise<void> {
+    const endOffset = itemOffset + usersPerPage;
+    setCurrentUsersInPage(data.slice(itemOffset, endOffset));
+  }
 
   function handleOnPageChange(page): void {
     setItemOffset((page - 1) * usersPerPage);
@@ -93,7 +96,7 @@ export function TableComponent({
         >
           <Thead height="80px">
             <Tr background={`${theme.colors.aquaMarine}`}>
-              {userColumnValues.map(TableItem => (
+              {headerTable.map(TableItem => (
                 <Th
                   id="thRow"
                   textTransform="capitalize"
@@ -108,32 +111,50 @@ export function TableComponent({
             </Tr>
           </Thead>
           <Tbody>
-            {Array.from({ length: usersPerPage }).map((_, index) => (
-              <Tr id="thHoverFather">
-                {userProps.map(props => (
-                  <Th
-                    id="thHoverChild"
-                    cursor="pointer"
-                    onClick={() =>
-                      handleClickedUser(currentUsersInPage[index].id)
-                    }
-                    height="81px"
-                    paddingTop="32px"
-                    paddingBottom="32px"
-                    textTransform="none"
-                    fontFamily="Nunito"
-                    fontWeight="bold"
-                    fontSize="20px"
+            {isLoading ? (
+              <Tr>
+                <Td bg="white" colspan={headerTable.length}>
+                  <Flex
+                    width="100%"
+                    alignContent="center"
+                    justifyContent="center"
+                    alignItems="center"
+                    marginBottom="16px"
                   >
-                    {currentUsersInPage[index] ? (
-                      <div>
-                        {refinedValue(currentUsersInPage[index][props])}
-                      </div>
-                    ) : null}
-                  </Th>
-                ))}
+                    <Spinner size="xl" alignItems="center" color={theme.colors.aquaMarine} />
+                  </Flex>
+                </Td>
               </Tr>
-            ))}
+            ) : (
+              <>
+                {Array.from({ length: usersPerPage }).map((_, index) => (
+                  <Tr id="thHoverFather">
+                    {objectProps.map(props => (
+                      <Td
+                        id="thHoverChild"
+                        cursor="pointer"
+                        onClick={() =>
+                          handleOpenModal(currentUsersInPage[index].id)
+                        }
+                        height="81px"
+                        paddingTop="32px"
+                        paddingBottom="32px"
+                        textTransform="none"
+                        fontFamily="Nunito"
+                        fontWeight="bold"
+                        fontSize="20px"
+                      >
+                        {currentUsersInPage[index] ? (
+                          <div>
+                            {refinedValue(currentUsersInPage[index][props])}
+                          </div>
+                        ) : null}
+                      </Td>
+                    ))}
+                  </Tr>
+                ))}
+              </>
+            )}
           </Tbody>
         </Table>
       </Box>

@@ -1,25 +1,24 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ImEye } from 'react-icons/im';
 import { IoMdRefresh } from 'react-icons/io';
 import { IoAddSharp } from 'react-icons/io5';
+import { Container, Content, ContentBody } from '../../styles/pages/home';
+import { DashboardLayout } from '../../components/DeashboardLayout.tsx';
+import { ClinicaViewButton } from '../../components/ClinicaViewButton';
+import theme from '../../styles/theme';
+import { server } from '../../mocks/clinic';
+import ContentHeaderDashboard from '../../components/ContentHeaderDashboard';
+import { TableComponent } from '../../components/Table';
 
-import { ClinicaViewButton } from '../components/ClinicaViewButton';
-import { server } from '../mocks/clinic';
-
-import { TableComponent } from '../components/Table';
-import theme from '../styles/theme';
-
-import { Container, Content, ContentBody } from '../styles/pages/home';
-import { DashboardLayout } from '../components/DeashboardLayout.tsx';
-import CreateClinical from '../components/CreateClinical';
-import ContentHeaderDashboard from '../components/ContentHeaderDashboard';
-
-const Home: React.FC = () => {
-  const [users, setUsers] = useState([]);
-
-  const [isTableOpen, setisTableOpen] = useState(false);
+const Specialty: React.FC = () => {
+  const [isTableOpen, setIsTableOpen] = useState(false);
   const [isInsertionOpen, setIsInsertionOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  const handleOpenTable = (): void => {
+    setIsTableOpen(currentOpenTable => !currentOpenTable);
+  };
 
   const getData = async (): Promise<void> => {
     setIsLoading(true);
@@ -27,37 +26,29 @@ const Home: React.FC = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   const handleOpenModal = (clickedUserIndex: string): void => {
     console.log(
       `id recebido na pagina clinicas (pai) do componente table: ${clickedUserIndex}`
     );
   };
 
-  const handleOpenTable = (): void => {
-    setisTableOpen(currentOpenTable => !currentOpenTable);
-  };
-
   const handleOpenInsertionForm = (): void => {
     setIsInsertionOpen(currentInsertionOpen => !currentInsertionOpen);
   };
 
-  const handleCreateClinical = useCallback(values => {
-    console.log(values);
+  useEffect(() => {
+    getData();
   }, []);
 
   const headerTable = ['Código', 'Nome', 'Endereço', 'Telefone', 'E-mail'];
   const objectProps = ['id', 'name', 'address', 'phone', 'email'];
 
   return (
-    <DashboardLayout name="clinic" titlePage="Clínica">
+    <DashboardLayout name="specialty" titlePage="Especialidades">
       <Container>
         <Content>
           <ContentHeaderDashboard
-            title="Clínicas"
+            title="Especialidades"
             getData={getData}
             handleOpenTable={handleOpenTable}
           />
@@ -65,8 +56,8 @@ const Home: React.FC = () => {
             {isTableOpen && (
               <>
                 <p>
-                  Aqui você pode visualizar as clínicas existentes neste banco
-                  de dados, bem como, atualizar ou exluir-las!
+                  Aqui você pode visualizar as especialidades existentes neste
+                  banco de dados, bem como, atualizar existentes ou excluí-las!
                 </p>
                 <TableComponent
                   isLoading={isLoading}
@@ -85,13 +76,6 @@ const Home: React.FC = () => {
               text="Inserção"
               onClickFunction={handleOpenInsertionForm}
             />
-
-            {isInsertionOpen && (
-              <>
-                <p>Aqui você pode inserir novas clínicas ao banco!</p>
-                <CreateClinical handleSubmit={handleCreateClinical} />
-              </>
-            )}
           </ContentBody>
         </Content>
       </Container>
@@ -99,4 +83,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Specialty;

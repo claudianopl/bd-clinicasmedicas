@@ -31,10 +31,11 @@ import {
   P,
   Nav,
   ContentChildren,
+  ContentMenu,
 } from './styles';
 
 interface DashboardLayoutProps {
-  name: string;
+  name: 'clinic' | 'specialty' | 'medical' | 'patients' | 'schedule';
   titlePage: string;
   children: React.ReactNode;
 }
@@ -138,7 +139,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </GridItem>
         </Grid>
       </Header>
-      <div>
+      <div id="outer-container" style={{ height: '100%' }}>
         <Menu
           pageWrapId="page-wrap"
           isOpen={isOpenMenu}
@@ -173,7 +174,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </Nav>
               </Link>
 
-              <Link href="/">
+              <Link href="/especialidades">
                 <Nav isActive={name === 'specialty'} mt="1rem">
                   <FaMicroscope size={30} />
                   <a>Especialidades</a>
@@ -212,11 +213,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </Flex>
           </Box>
         </Menu>
-        <Box id="page-wrap" style={{ height: '100%', overflow: 'auto' }}>
+        <ContentMenu
+          id="page-wrap"
+          isActive={isOpenMenu}
+          style={{ overflow: 'auto' }}
+        >
           <ContentChildren style={{ marginTop: '135.94px' }}>
             {children}
           </ContentChildren>
-        </Box>
+        </ContentMenu>
       </div>
     </>
   );

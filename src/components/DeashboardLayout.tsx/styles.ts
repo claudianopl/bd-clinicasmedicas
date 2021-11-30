@@ -8,6 +8,10 @@ interface ContainerProps {
   isActive: boolean;
 }
 
+interface ContentMenuProps {
+  isActive: boolean;
+}
+
 export const Header = styled.div`
   background-color: ${props => props.theme.colors.white};
   width: 100%;
@@ -129,6 +133,15 @@ export const ContentChildren = styled(Box)`
   padding-left: 35px;
   padding-right: 53px;
   margin-bottom: 197px;
+`;
+
+export const ContentMenu = styled.div<ContentMenuProps>`
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  ${props => props.isActive && css`
+    width: calc(100% - 25rem)
+  `}
 `;
 
 // import styled from 'styled-components';

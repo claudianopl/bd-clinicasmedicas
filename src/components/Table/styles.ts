@@ -3,9 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
   #thHoverFather {
     transition: 0.3s;
+    background: white;
 
     &:hover {
-      background-color: ${props => props.theme.colors.aquaMarine};
+      background: ${props => props.theme.colors.aquaMarine};
       filter: brightness(0.99);
     }
   }
