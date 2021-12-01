@@ -20,6 +20,7 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
 }) => {
   return (
     <Collapse in={isOpen} animateOpacity>
+      <p>Aqui você pode inserir novas clínicas ao banco!</p>
       <Container>
         <Formik
           initialValues={{

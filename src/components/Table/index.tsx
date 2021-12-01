@@ -99,6 +99,10 @@ export function TableComponent({
   return (
     <Collapse in={isOpen} animateOpacity>
       <Container>
+        <p>
+          Aqui você pode visualizar as clínicas existentes neste banco de dados,
+          bem como, atualizar ou exluir-las!
+        </p>
         <Box width="100%">
           <Table
             borderTopRadius="1rem"

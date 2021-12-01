@@ -15,6 +15,7 @@ import CreateClinical from '../components/CreateClinical';
 import ContentHeaderDashboard from '../components/ContentHeaderDashboard';
 import CreateSpecialty from '../components/CreateEspecialy';
 import CreateMedic from '../components/CreateMedic';
+import CreatePatient from '../components/CreatePatient';
 
 const Home: React.FC = () => {
   const [users, setUsers] = useState([]);
@@ -66,10 +67,6 @@ const Home: React.FC = () => {
           />
           <ContentBody>
             <>
-              <p>
-                Aqui você pode visualizar as clínicas existentes neste banco de
-                dados, bem como, atualizar ou exluir-las!
-              </p>
               <TableComponent
                 isOpen={isTableOpen}
                 isLoading={isLoading}
@@ -89,8 +86,7 @@ const Home: React.FC = () => {
             />
 
             <>
-              <p>Aqui você pode inserir novas clínicas ao banco!</p>
-              <CreateMedic
+              <CreatePatient
                 handleSubmit={handleCreateClinical}
                 isOpen={isInsertionOpen}
               />

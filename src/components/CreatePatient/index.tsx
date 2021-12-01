@@ -4,13 +4,14 @@ import { FaClinicMedical, FaMicroscope } from 'react-icons/fa';
 import { FiMail, FiPhone } from 'react-icons/fi';
 import { IoLocationOutline } from 'react-icons/io5';
 import { VscTriangleDown } from 'react-icons/vsc';
-import { BsFillFileEarmarkTextFill } from 'react-icons/bs';
+import { BsFillFileEarmarkTextFill, BsPersonCircle } from 'react-icons/bs';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import { MdMedicalServices } from 'react-icons/md';
-
+import { AiFillIdcard } from 'react-icons/ai';
+import InputMask from 'react-input-mask';
 import { Collapse } from '@chakra-ui/react';
 import InputText from '../InputText';
-import { Container, ButtonSubmit, selectChildrenStyles } from './styles';
+import { Container, ButtonSubmit, MaskStyles } from './styles';
 
 import { schema } from './schema';
 
@@ -19,7 +20,7 @@ interface CreateClinicalProps {
   isOpen: boolean;
 }
 
-const CreateMedic: React.FC<CreateClinicalProps> = ({
+const CreatePatient: React.FC<CreateClinicalProps> = ({
   handleSubmit,
   isOpen,
 }) => {
@@ -29,11 +30,12 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
       <Container>
         <Formik
           initialValues={{
-            medicName: '',
-            specCode: '',
+            patientName: '',
+            birthDate: '',
             phone: '',
             email: '',
             gender: 'masculino',
+            cpf: '',
           }}
           validateOnChange={false}
           validateOnBlur={false}
@@ -47,21 +49,27 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
               <Grid w="100%" templateColumns="repeat(6, 1fr)" gap={6}>
                 <GridItem colSpan={3}>
                   <InputText
-                    name="medicName"
-                    icon={MdMedicalServices}
-                    placeholder="Nome do médico"
+                    name="patientName"
+                    icon={BsPersonCircle}
+                    placeholder="Nome do paciente"
                   />
                 </GridItem>
                 <GridItem colSpan={2} mr={3}>
-                  <InputText
-                    name="specCode"
-                    icon={FaMicroscope}
-                    placeholder="Código da especialidade"
+                  <MaskStyles
+                    onChange={formikProps.handleChange}
+                    onBlur={formikProps.handleBlur}
+                    value={formikProps.values.birthDate}
+                    mask="99/99/9999"
+                    name="birthDate"
+                    placeholder="Data de nascimento"
                   />
                 </GridItem>
 
                 <GridItem colSpan={1} className="gridItemClass">
                   <Select
+                    paddingBottom="5px"
+                    color="rgba(39, 39, 39, 0.5)"
+                    borderColor="rgba(39, 39, 39, 0.2)"
                     onChange={formikProps.handleChange}
                     onBlur={formikProps.handleBlur}
                     value={formikProps.values.gender}
@@ -80,14 +88,25 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
                   </Select>
                 </GridItem>
 
-                <GridItem colSpan={3}>
+                <GridItem colSpan={2}>
                   <InputText
                     name="phone"
                     icon={FiPhone}
                     placeholder="Telefone"
                   />
                 </GridItem>
-                <GridItem colSpan={3}>
+
+                <GridItem colSpan={2} mr={3}>
+                  <MaskStyles
+                    onChange={formikProps.handleChange}
+                    onBlur={formikProps.handleBlur}
+                    value={formikProps.values.cpf}
+                    mask="999.999.999.99"
+                    name="cpf"
+                    placeholder="Insira o seu CPF"
+                  />
+                </GridItem>
+                <GridItem colSpan={2}>
                   <InputText name="email" icon={FiMail} placeholder="E-mail" />
                 </GridItem>
 
@@ -99,11 +118,12 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
                         type="submit"
                         disabled={
                           !(
-                            formikProps.values.medicName !== '' &&
-                            formikProps.values.specCode !== '' &&
+                            formikProps.values.patientName !== '' &&
+                            formikProps.values.birthDate !== '' &&
                             formikProps.values.phone !== '' &&
                             formikProps.values.email !== '' &&
-                            formikProps.values.gender !== ''
+                            formikProps.values.gender !== '' &&
+                            formikProps.values.cpf !== ''
                           )
                         }
                       >
@@ -121,4 +141,4 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
   );
 };
 
-export default CreateMedic;
+export default CreatePatient;
