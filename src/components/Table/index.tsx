@@ -1,4 +1,15 @@
-import { Table, Thead, Tbody, Tr, Th, Box, Td, Spinner, Flex } from '@chakra-ui/react';
+import { Collapse } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Box,
+  Td,
+  Spinner,
+  Flex,
+} from '@chakra-ui/react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import theme from '../../styles/theme';
@@ -24,6 +35,7 @@ interface tableComponentProps {
   data: userTypeProps[];
   handleOpenModal: (args: string) => void;
   isLoading?: boolean;
+  isOpen: boolean;
 }
 
 export function TableComponent({
@@ -32,6 +44,7 @@ export function TableComponent({
   headerTable,
   handleOpenModal,
   isLoading,
+  isOpen,
 }: tableComponentProps): JSX.Element {
   const [itemOffset, setItemOffset] = useState(null);
   const [currentUsersInPage, setCurrentUsersInPage] = useState<userTypeProps[]>(
@@ -54,9 +67,6 @@ export function TableComponent({
   );
 
   const threeDotsAtEnd = '...';
-  useEffect(() => {
-    setData();
-  }, [itemOffset, data]);
 
   async function setData(): Promise<void> {
     const endOffset = itemOffset + usersPerPage;
@@ -83,129 +93,141 @@ export function TableComponent({
 
     return userObject;
   }
-
+  useEffect(() => {
+    setData();
+  }, [itemOffset, data]);
   return (
-    <Container>
-      <Box width="100%">
-        <Table
-          borderTopRadius="1rem"
-          width="100%"
-          variant="simple"
-          boxShadow="0 3px 6px 0 rgba(0, 0, 0, 0.16)"
-          paddingTop="1rem"
-        >
-          <Thead height="80px">
-            <Tr background={`${theme.colors.aquaMarine}`}>
-              {headerTable.map(TableItem => (
-                <Th
-                  id="thRow"
-                  textTransform="capitalize"
-                  fontSize="20px"
-                  fontWeight="bold"
-                  fontFamily="Nunito"
-                  color={`${theme.colors.white}`}
-                >
-                  <span>{TableItem}</span>
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {isLoading ? (
-              <Tr>
-                <Td bg="white" colspan={headerTable.length}>
-                  <Flex
-                    width="100%"
-                    alignContent="center"
-                    justifyContent="center"
-                    alignItems="center"
-                    marginBottom="16px"
+    <Collapse in={isOpen} animateOpacity>
+      <Container>
+        <p>
+          Aqui você pode visualizar as clínicas existentes neste banco de dados,
+          bem como, atualizar ou exluir-las!
+        </p>
+        <Box width="100%">
+          <Table
+            borderTopRadius="1rem"
+            width="100%"
+            variant="simple"
+            boxShadow="0 3px 6px 0 rgba(0, 0, 0, 0.16)"
+            paddingTop="1rem"
+          >
+            <Thead height="80px">
+              <Tr background={`${theme.colors.aquaMarine}`}>
+                {headerTable.map(TableItem => (
+                  <Th
+                    id="thRow"
+                    textTransform="capitalize"
+                    fontSize="20px"
+                    fontWeight="bold"
+                    fontFamily="Nunito"
+                    color={`${theme.colors.white}`}
                   >
-                    <Spinner size="xl" alignItems="center" color={theme.colors.aquaMarine} />
-                  </Flex>
-                </Td>
-              </Tr>
-            ) : (
-              <>
-                {Array.from({ length: usersPerPage }).map((_, index) => (
-                  <Tr id="thHoverFather">
-                    {objectProps.map(props => (
-                      <Td
-                        id="thHoverChild"
-                        cursor="pointer"
-                        onClick={() =>
-                          handleOpenModal(currentUsersInPage[index].id)
-                        }
-                        height="81px"
-                        paddingTop="32px"
-                        paddingBottom="32px"
-                        textTransform="none"
-                        fontFamily="Nunito"
-                        fontWeight="bold"
-                        fontSize="20px"
-                      >
-                        {currentUsersInPage[index] ? (
-                          <div>
-                            {refinedValue(currentUsersInPage[index][props])}
-                          </div>
-                        ) : null}
-                      </Td>
-                    ))}
-                  </Tr>
+                    <span>{TableItem}</span>
+                  </Th>
                 ))}
-              </>
-            )}
-          </Tbody>
-        </Table>
-      </Box>
-      <TableFooter>
-        <ButtonFlexWrapper>
-          <button
-            type="button"
-            onClick={() => handlePageSkipChange(currentPage - 1)}
-          >
-            <HiChevronLeft
-              size={30}
-              color={
-                currentPage === firstPage
-                  ? `${theme.colors.paleGrey}`
-                  : `${theme.colors.steelGrey}`
-              }
-            />
-          </button>
-          {Array.from({
-            length: Math.min(howManyDisplayedButtons, maxNumberOfPages),
-          })
-            .map((_, index) => index + first)
-            .map(page => (
-              <FooterButtonsWrapper>
-                <button
-                  key={page}
-                  type="button"
-                  onClick={e => handleOnPageChange(page)}
-                  className={
-                    page === currentPage ? 'paginationItemActive' : null
-                  } // a tratar
-                >
-                  {page}
-                </button>
-              </FooterButtonsWrapper>
-            ))}
-          <button
-            type="button"
-            onClick={() => handlePageSkipChange(currentPage + 1)}
-          >
-            <HiChevronRight
-              size={30}
-              color={
-                currentPage === maxNumberOfPages
-                  ? `${theme.colors.paleGrey}`
-                  : `${theme.colors.steelGrey}`
-              }
-            />
-          </button>
-        </ButtonFlexWrapper>
-      </TableFooter>
-    </Container>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {isLoading ? (
+                <Tr>
+                  <Td bg="white" colspan={headerTable.length}>
+                    <Flex
+                      width="100%"
+                      alignContent="center"
+                      justifyContent="center"
+                      alignItems="center"
+                      marginBottom="16px"
+                    >
+                      <Spinner
+                        size="xl"
+                        alignItems="center"
+                        color={theme.colors.aquaMarine}
+                      />
+                    </Flex>
+                  </Td>
+                </Tr>
+              ) : (
+                <>
+                  {Array.from({ length: usersPerPage }).map((_, index) => (
+                    <Tr id="thHoverFather">
+                      {objectProps.map(props => (
+                        <Td
+                          id="thHoverChild"
+                          cursor="pointer"
+                          onClick={() =>
+                            handleOpenModal(currentUsersInPage[index].id)
+                          }
+                          height="81px"
+                          paddingTop="32px"
+                          paddingBottom="32px"
+                          textTransform="none"
+                          fontFamily="Nunito"
+                          fontWeight="bold"
+                          fontSize="20px"
+                        >
+                          {currentUsersInPage[index] ? (
+                            <div>
+                              {refinedValue(currentUsersInPage[index][props])}
+                            </div>
+                          ) : null}
+                        </Td>
+                      ))}
+                    </Tr>
+                  ))}
+                </>
+              )}
+            </Tbody>
+          </Table>
+        </Box>
+        <TableFooter>
+          <ButtonFlexWrapper>
+            <button
+              type="button"
+              onClick={() => handlePageSkipChange(currentPage - 1)}
+            >
+              <HiChevronLeft
+                size={30}
+                color={
+                  currentPage === firstPage
+                    ? `${theme.colors.paleGrey}`
+                    : `${theme.colors.steelGrey}`
+                }
+              />
+            </button>
+            {Array.from({
+              length: Math.min(howManyDisplayedButtons, maxNumberOfPages),
+            })
+              .map((_, index) => index + first)
+              .map(page => (
+                <FooterButtonsWrapper>
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={e => handleOnPageChange(page)}
+                    className={
+                      page === currentPage ? 'paginationItemActive' : null
+                    } // a tratar
+                  >
+                    {page}
+                  </button>
+                </FooterButtonsWrapper>
+              ))}
+            <button
+              type="button"
+              onClick={() => handlePageSkipChange(currentPage + 1)}
+            >
+              <HiChevronRight
+                size={30}
+                color={
+                  currentPage === maxNumberOfPages
+                    ? `${theme.colors.paleGrey}`
+                    : `${theme.colors.steelGrey}`
+                }
+              />
+            </button>
+          </ButtonFlexWrapper>
+        </TableFooter>
+      </Container>
+    </Collapse>
   );
 }
