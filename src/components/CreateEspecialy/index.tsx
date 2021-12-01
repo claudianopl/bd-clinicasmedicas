@@ -1,8 +1,10 @@
 import { Grid, GridItem, Spacer, Flex, Box } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import { FaClinicMedical } from 'react-icons/fa';
+import { FaClinicMedical, FaMicroscope } from 'react-icons/fa';
 import { FiMail, FiPhone } from 'react-icons/fi';
+import { BsFillFileEarmarkTextFill } from 'react-icons/bs';
 import { IoLocationOutline } from 'react-icons/io5';
+import { HiOutlineHashtag } from 'react-icons/hi';
 import { Collapse } from '@chakra-ui/react';
 import InputText from '../InputText';
 import { Container, ButtonSubmit } from './styles';
@@ -14,7 +16,7 @@ interface CreateClinicalProps {
   isOpen: boolean;
 }
 
-const CreateClinical: React.FC<CreateClinicalProps> = ({
+const CreateSpecialty: React.FC<CreateClinicalProps> = ({
   handleSubmit,
   isOpen,
 }) => {
@@ -23,10 +25,9 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
       <Container>
         <Formik
           initialValues={{
-            clinicName: '',
-            phone: '',
-            email: '',
-            address: '',
+            specCode: '',
+            specName: '',
+            specDescription: '',
           }}
           validateOnChange={false}
           validateOnBlur={false}
@@ -38,28 +39,26 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
           {formikProps => (
             <Form>
               <Grid w="100%" templateColumns="repeat(6, 1fr)" gap={6}>
-                <GridItem colSpan={6}>
+                <GridItem colSpan={3}>
                   <InputText
-                    name="clinicName"
-                    icon={FaClinicMedical}
-                    placeholder="Nome da clínica"
+                    name="specCode"
+                    icon={HiOutlineHashtag}
+                    placeholder="Código da especialidade"
                   />
                 </GridItem>
                 <GridItem colSpan={3} mr={3}>
                   <InputText
-                    name="phone"
-                    icon={FiPhone}
-                    placeholder="Telefone"
+                    name="specName"
+                    icon={FaMicroscope}
+                    placeholder="Nome da especialidade"
                   />
                 </GridItem>
-                <GridItem colSpan={3} ml={3}>
-                  <InputText name="email" icon={FiMail} placeholder="Email" />
-                </GridItem>
+
                 <GridItem colSpan={6}>
                   <InputText
-                    name="address"
-                    icon={IoLocationOutline}
-                    placeholder="Rua Agostinho Morereira, 188, Boa Viagem"
+                    name="specDescription"
+                    icon={BsFillFileEarmarkTextFill}
+                    placeholder="Descrição da especialidade"
                   />
                 </GridItem>
                 <GridItem colSpan={6}>
@@ -70,10 +69,9 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
                         type="submit"
                         disabled={
                           !(
-                            formikProps.values.clinicName !== '' &&
-                            formikProps.values.phone !== '' &&
-                            formikProps.values.email !== '' &&
-                            formikProps.values.address !== ''
+                            formikProps.values.specCode !== '' &&
+                            formikProps.values.specName !== '' &&
+                            formikProps.values.specDescription !== ''
                           )
                         }
                       >
@@ -91,4 +89,4 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
   );
 };
 
-export default CreateClinical;
+export default CreateSpecialty;

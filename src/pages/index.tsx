@@ -13,6 +13,8 @@ import { Container, Content, ContentBody } from '../styles/pages/home';
 import { DashboardLayout } from '../components/DeashboardLayout.tsx';
 import CreateClinical from '../components/CreateClinical';
 import ContentHeaderDashboard from '../components/ContentHeaderDashboard';
+import CreateSpecialty from '../components/CreateEspecialy';
+import CreateMedic from '../components/CreateMedic';
 
 const Home: React.FC = () => {
   const [users, setUsers] = useState([]);
@@ -46,6 +48,7 @@ const Home: React.FC = () => {
   };
 
   const handleCreateClinical = useCallback(values => {
+    console.log('values abaixo');
     console.log(values);
   }, []);
 
@@ -62,21 +65,20 @@ const Home: React.FC = () => {
             handleOpenTable={handleOpenTable}
           />
           <ContentBody>
-            {isTableOpen && (
-              <>
-                <p>
-                  Aqui você pode visualizar as clínicas existentes neste banco
-                  de dados, bem como, atualizar ou exluir-las!
-                </p>
-                <TableComponent
-                  isLoading={isLoading}
-                  data={users}
-                  objectProps={objectProps}
-                  headerTable={headerTable}
-                  handleOpenModal={handleOpenModal}
-                />
-              </>
-            )}
+            <>
+              <p>
+                Aqui você pode visualizar as clínicas existentes neste banco de
+                dados, bem como, atualizar ou exluir-las!
+              </p>
+              <TableComponent
+                isOpen={isTableOpen}
+                isLoading={isLoading}
+                data={users}
+                objectProps={objectProps}
+                headerTable={headerTable}
+                handleOpenModal={handleOpenModal}
+              />
+            </>
 
             <ClinicaViewButton
               icon={
@@ -86,12 +88,13 @@ const Home: React.FC = () => {
               onClickFunction={handleOpenInsertionForm}
             />
 
-            {isInsertionOpen && (
-              <>
-                <p>Aqui você pode inserir novas clínicas ao banco!</p>
-                <CreateClinical handleSubmit={handleCreateClinical} />
-              </>
-            )}
+            <>
+              <p>Aqui você pode inserir novas clínicas ao banco!</p>
+              <CreateMedic
+                handleSubmit={handleCreateClinical}
+                isOpen={isInsertionOpen}
+              />
+            </>
           </ContentBody>
         </Content>
       </Container>

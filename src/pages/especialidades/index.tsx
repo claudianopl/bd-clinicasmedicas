@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { ImEye } from 'react-icons/im';
+
 import { IoMdRefresh } from 'react-icons/io';
 import { IoAddSharp } from 'react-icons/io5';
 import { Container, Content, ContentBody } from '../../styles/pages/home';
@@ -9,6 +10,9 @@ import theme from '../../styles/theme';
 import { server } from '../../mocks/clinic';
 import ContentHeaderDashboard from '../../components/ContentHeaderDashboard';
 import { TableComponent } from '../../components/Table';
+import CreateClinical from '../../components/CreateClinical';
+import CreateSpecialty from '../../components/CreateEspecialy';
+import CreateMedic from '../../components/CreateMedic';
 
 const Specialty: React.FC = () => {
   const [isTableOpen, setIsTableOpen] = useState(false);
@@ -36,6 +40,10 @@ const Specialty: React.FC = () => {
     setIsInsertionOpen(currentInsertionOpen => !currentInsertionOpen);
   };
 
+  const handleCreateClinical = useCallback(values => {
+    console.log(values);
+  }, []);
+
   useEffect(() => {
     getData();
   }, []);
@@ -44,7 +52,7 @@ const Specialty: React.FC = () => {
   const objectProps = ['id', 'name', 'address', 'phone', 'email'];
 
   return (
-    <DashboardLayout name="specialty" titlePage="Especialidades">
+    <DashboardLayout name="medical" titlePage="Médicos">
       <Container>
         <Content>
           <ContentHeaderDashboard
@@ -53,21 +61,18 @@ const Specialty: React.FC = () => {
             handleOpenTable={handleOpenTable}
           />
           <ContentBody>
-            {isTableOpen && (
-              <>
-                <p>
-                  Aqui você pode visualizar as especialidades existentes neste
-                  banco de dados, bem como, atualizar existentes ou excluí-las!
-                </p>
-                <TableComponent
-                  isLoading={isLoading}
-                  data={users}
-                  objectProps={objectProps}
-                  headerTable={headerTable}
-                  handleOpenModal={handleOpenModal}
-                />
-              </>
-            )}
+            <p>
+              Aqui você pode visualizar as especialidades existentes neste banco
+              de dados, bem como, atualizar existentes ou excluí-las!
+            </p>
+            <TableComponent
+              isOpen={isTableOpen}
+              isLoading={isLoading}
+              data={users}
+              objectProps={objectProps}
+              headerTable={headerTable}
+              handleOpenModal={handleOpenModal}
+            />
 
             <ClinicaViewButton
               icon={
@@ -76,6 +81,15 @@ const Specialty: React.FC = () => {
               text="Inserção"
               onClickFunction={handleOpenInsertionForm}
             />
+
+            <>
+              <p>Aqui você pode inserir novas clínicas ao banco!</p>
+
+              <CreateMedic
+                handleSubmit={handleCreateClinical}
+                isOpen={isInsertionOpen}
+              />
+            </>
           </ContentBody>
         </Content>
       </Container>
