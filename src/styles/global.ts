@@ -49,6 +49,19 @@ export const theme = {
       body: {
         background: '#faf8f5',
         color: '#3e3e3e',
+        scrollbarWidth: 'thin',
+        scrollbarColor: '#F4F4F4 #dad7d7',
+      },
+      'body::-webkit-scrollbar': {
+        width: '12px',
+      },
+      'body::-webkit-scrollbar-track': {
+        background: '#F4F4F4',
+        width: '6px',
+      },
+      'body::-webkit-scrollbar-thumb': {
+        background: '#dad7d7',
+        borderRadius: '20px',
       },
       'body, input, textarea, select, button': {
         font: '400 1rem "Roboto", sans-serif',
