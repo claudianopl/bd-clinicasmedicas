@@ -181,14 +181,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </Nav>
               </Link>
 
-              <Link href="/">
+              <Link href="/medicos">
                 <Nav isActive={name === 'medical'} mt="1rem">
                   <MdMedicalServices size={30} />
                   <a>Médicos</a>
                 </Nav>
               </Link>
 
-              <Link href="/">
+              <Link href="/pacientes">
                 <Nav isActive={name === 'patients'} mt="1rem">
                   <MdPeopleOutline size={30} />
                   <a>Pacientes</a>

@@ -52,7 +52,7 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
                     placeholder="Nome do médico"
                   />
                 </GridItem>
-                <GridItem colSpan={2} mr={3}>
+                <GridItem colSpan={2}>
                   <InputText
                     name="specCode"
                     icon={FaMicroscope}

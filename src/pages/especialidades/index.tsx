@@ -1,7 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import { ImEye } from 'react-icons/im';
-
-import { IoMdRefresh } from 'react-icons/io';
 import { IoAddSharp } from 'react-icons/io5';
 import { Container, Content, ContentBody } from '../../styles/pages/home';
 import { DashboardLayout } from '../../components/DeashboardLayout.tsx';
@@ -10,9 +7,7 @@ import theme from '../../styles/theme';
 import { server } from '../../mocks/clinic';
 import ContentHeaderDashboard from '../../components/ContentHeaderDashboard';
 import { TableComponent } from '../../components/Table';
-import CreateClinical from '../../components/CreateClinical';
 import CreateSpecialty from '../../components/CreateEspecialy';
-import CreateMedic from '../../components/CreateMedic';
 
 const Specialty: React.FC = () => {
   const [isTableOpen, setIsTableOpen] = useState(false);
@@ -52,7 +47,7 @@ const Specialty: React.FC = () => {
   const objectProps = ['id', 'name', 'address', 'phone', 'email'];
 
   return (
-    <DashboardLayout name="medical" titlePage="Médicos">
+    <DashboardLayout name="specialty" titlePage="Especialidade">
       <Container>
         <Content>
           <ContentHeaderDashboard
@@ -61,10 +56,6 @@ const Specialty: React.FC = () => {
             handleOpenTable={handleOpenTable}
           />
           <ContentBody>
-            <p>
-              Aqui você pode visualizar as especialidades existentes neste banco
-              de dados, bem como, atualizar existentes ou excluí-las!
-            </p>
             <TableComponent
               isOpen={isTableOpen}
               isLoading={isLoading}
@@ -83,9 +74,7 @@ const Specialty: React.FC = () => {
             />
 
             <>
-              <p>Aqui você pode inserir novas clínicas ao banco!</p>
-
-              <CreateMedic
+              <CreateSpecialty
                 handleSubmit={handleCreateClinical}
                 isOpen={isInsertionOpen}
               />

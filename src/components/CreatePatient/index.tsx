@@ -8,12 +8,12 @@ import { BsFillFileEarmarkTextFill, BsPersonCircle } from 'react-icons/bs';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import { MdMedicalServices } from 'react-icons/md';
 import { AiFillIdcard } from 'react-icons/ai';
-import InputMask from 'react-input-mask';
 import { Collapse } from '@chakra-ui/react';
 import InputText from '../InputText';
 import { Container, ButtonSubmit, MaskStyles } from './styles';
 
 import { schema } from './schema';
+import TextMask from '../InputMask';
 
 interface CreateClinicalProps {
   handleSubmit: (values) => void;
@@ -55,10 +55,8 @@ const CreatePatient: React.FC<CreateClinicalProps> = ({
                   />
                 </GridItem>
                 <GridItem colSpan={2} mr={3}>
-                  <MaskStyles
-                    onChange={formikProps.handleChange}
-                    onBlur={formikProps.handleBlur}
-                    value={formikProps.values.birthDate}
+                  <TextMask
+                    icon={FiMail}
                     mask="99/99/9999"
                     name="birthDate"
                     placeholder="Data de nascimento"
@@ -97,10 +95,8 @@ const CreatePatient: React.FC<CreateClinicalProps> = ({
                 </GridItem>
 
                 <GridItem colSpan={2} mr={3}>
-                  <MaskStyles
-                    onChange={formikProps.handleChange}
-                    onBlur={formikProps.handleBlur}
-                    value={formikProps.values.cpf}
+                  <TextMask
+                    icon={FiMail}
                     mask="999.999.999.99"
                     name="cpf"
                     placeholder="Insira o seu CPF"
