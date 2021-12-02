@@ -1,13 +1,21 @@
+/* eslint-disable prettier/prettier */
 import { Box } from '@chakra-ui/react';
 import { saturate } from 'polished';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled(Box)`
+interface ContainerProps {
+  quickInsert: boolean;
+}
+
+export const Container = styled(Box) <ContainerProps>`
   background: white;
-  padding: 33.1px 47.9px 29.2px 48px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  border-top: 19px solid ${props => props.theme.colors.aquaMarine};
-  border-radius: 0.65rem;
+
+  ${props => props.quickInsert === false && css`
+    padding: 33.1px 47.9px 29.2px 48px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    border-top: 19px solid ${props.theme.colors.aquaMarine};
+    border-radius: 0.65rem;
+  `}
 `;
 
 export const ButtonSubmit = styled.button`

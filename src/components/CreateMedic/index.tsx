@@ -17,16 +17,20 @@ import { schema } from './schema';
 interface CreateClinicalProps {
   handleSubmit: (values) => void;
   isOpen: boolean;
+  quickInsert?: boolean;
 }
 
 const CreateMedic: React.FC<CreateClinicalProps> = ({
   handleSubmit,
   isOpen,
+  quickInsert = false,
 }) => {
   return (
     <Collapse in={isOpen} animateOpacity>
-      <p>Aqui você pode inserir novas clínicas ao banco!</p>
-      <Container>
+      {quickInsert === false && (
+        <p>Aqui você pode inserir novas clínicas ao banco!</p>
+      )}
+      <Container quickInsert={quickInsert}>
         <Formik
           initialValues={{
             medicName: '',

@@ -79,7 +79,7 @@ const ModalCustom: React.FC<ModalCustomProps> = ({
           </Grid>
         </ModalHeader>
 
-        <ModalBody mb="84px">{modalBody}</ModalBody>
+        <ModalBody mb="16px">{modalBody}</ModalBody>
       </ModalContent>
     </Modal>
   );

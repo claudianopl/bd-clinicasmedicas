@@ -87,7 +87,7 @@ export function TableComponent({
   }
 
   function refinedValue(userObject: string): string {
-    if (userObject.length > 26) {
+    if (userObject && userObject.length > 26) {
       return userObject.substring(0, 26) + threeDotsAtEnd;
     }
 
@@ -155,7 +155,7 @@ export function TableComponent({
                           id="thHoverChild"
                           cursor="pointer"
                           onClick={() =>
-                            handleOpenModal(currentUsersInPage[index].id)
+                            handleOpenModal(currentUsersInPage[index][0])
                           }
                           height="81px"
                           paddingTop="32px"

@@ -16,6 +16,7 @@ import ContentHeaderDashboard from '../components/ContentHeaderDashboard';
 import CreateSpecialty from '../components/CreateEspecialy';
 import CreateMedic from '../components/CreateMedic';
 import CreatePatient from '../components/CreatePatient';
+import { getAllClinics } from '../Api/Services/Clinic';
 
 const Home: React.FC = () => {
   const [users, setUsers] = useState([]);
@@ -26,7 +27,13 @@ const Home: React.FC = () => {
 
   const getData = async (): Promise<void> => {
     setIsLoading(true);
-    setUsers(server);
+    try {
+      const response = await getAllClinics();
+
+      setUsers(response.data);
+    } catch {
+      console.log('erro');
+    }
     setIsLoading(false);
   };
 

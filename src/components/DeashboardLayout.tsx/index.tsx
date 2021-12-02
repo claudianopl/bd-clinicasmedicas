@@ -41,6 +41,10 @@ import {
 } from './styles';
 import ModalCustom from '../ModalCustom';
 import theme from '../../styles/theme';
+import CreateClinical from '../CreateClinical';
+import CreateEspecialy from '../CreateEspecialy';
+import CreateMedic from '../CreateMedic';
+import CreatePatient from '../CreatePatient';
 
 interface DashboardLayoutProps {
   name: 'clinic' | 'specialty' | 'medical' | 'patients' | 'schedule';
@@ -74,6 +78,22 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     console.log(userInput);
   }, []);
 
+  const handleCreateClinical = useCallback(values => {
+    console.log(values);
+  }, []);
+
+  const handleCreateEspecialy = useCallback(values => {
+    console.log(values);
+  }, []);
+
+  const handleCreateMedic = useCallback(values => {
+    console.log(values);
+  }, []);
+
+  const handleCreatePatient = useCallback(values => {
+    console.log(values);
+  }, []);
+
   return (
     <>
       <Head>
@@ -83,9 +103,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <Grid h="100%" templateColumns="repeat(12, 1fr)">
           <GridItem colSpan={{ sm: 5, md: 5, lg: 4 }} marginRight="7vw">
             <Flex alignItems="center" w="100%" h="100%">
-              <Box mr={{ sm: '0.5rem', md: '1rem', lg: '6.375rem' }}>
-                <Logo src="./logo.png" alt="<bd-clinicasmedicas/>" />
-              </Box>
+              <Flex
+                height="100%"
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+                color="#1c1c1c"
+                mr={{ sm: '0.5rem', md: '1rem', lg: '6.375rem' }}
+              >
+                <Heading fontSize="30px" mb="5px">
+                  {'<bd-clinicasmedicas/>'}
+                </Heading>
+                <p style={{ fontFamily: 'WorkSans', fontSize: '16px' }}>
+                  Gerenciador de clínicas médicas
+                </p>
+              </Flex>
               <Box>
                 <FiMenuIcon
                   onClick={() =>
@@ -283,46 +315,54 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       Selecione…
                     </MenuItem>
                   )}
-                  <MenuItem
-                    onClick={() =>
-                      setWahtForm({
-                        name: 'Clínicas',
-                        form: 1,
-                      })
-                    }
-                  >
-                    Clínicas
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() =>
-                      setWahtForm({
-                        name: 'Especialidades',
-                        form: 2,
-                      })
-                    }
-                  >
-                    Especialidades
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() =>
-                      setWahtForm({
-                        name: 'Médicos',
-                        form: 3,
-                      })
-                    }
-                  >
-                    Médicos
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() =>
-                      setWahtForm({
-                        name: 'Pacientes',
-                        form: 4,
-                      })
-                    }
-                  >
-                    Pacientes
-                  </MenuItem>
+                  {whatForm.form !== 1 && (
+                    <MenuItem
+                      onClick={() =>
+                        setWahtForm({
+                          name: 'Clínicas',
+                          form: 1,
+                        })
+                      }
+                    >
+                      Clínicas
+                    </MenuItem>
+                  )}
+                  {whatForm.form !== 2 && (
+                    <MenuItem
+                      onClick={() =>
+                        setWahtForm({
+                          name: 'Especialidades',
+                          form: 2,
+                        })
+                      }
+                    >
+                      Especialidades
+                    </MenuItem>
+                  )}
+                  {whatForm.form !== 3 && (
+                    <MenuItem
+                      onClick={() =>
+                        setWahtForm({
+                          name: 'Médicos',
+                          form: 3,
+                        })
+                      }
+                    >
+                      Médicos
+                    </MenuItem>
+                  )}
+                  {whatForm.form !== 4 && (
+                    <MenuItem
+                      onClick={() =>
+                        setWahtForm({
+                          name: 'Pacientes',
+                          form: 4,
+                        })
+                      }
+                    >
+                      Pacientes
+                    </MenuItem>
+                  )}
                 </MenuList>
               </MenuChakra>
             </Box>
@@ -347,6 +387,42 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   Escolha uma opção acima para iniciar a inserção rápida
                 </Heading>
               </Flex>
+            )}
+            {whatForm.form === 1 && (
+              <Box width="100%">
+                <CreateClinical
+                  quickInsert
+                  handleSubmit={handleCreateClinical}
+                  isOpen
+                />
+              </Box>
+            )}
+            {whatForm.form === 2 && (
+              <Box width="100%">
+                <CreateEspecialy
+                  quickInsert
+                  handleSubmit={handleCreateEspecialy}
+                  isOpen
+                />
+              </Box>
+            )}
+            {whatForm.form === 3 && (
+              <Box width="100%">
+                <CreateMedic
+                  quickInsert
+                  handleSubmit={handleCreateMedic}
+                  isOpen
+                />
+              </Box>
+            )}
+            {whatForm.form === 4 && (
+              <Box width="100%">
+                <CreatePatient
+                  quickInsert
+                  handleSubmit={handleCreatePatient}
+                  isOpen
+                />
+              </Box>
             )}
           </Flex>
         }

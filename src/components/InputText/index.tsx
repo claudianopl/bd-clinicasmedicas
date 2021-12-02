@@ -5,7 +5,7 @@ import { Container, ContainerText, Error } from './styles';
 
 interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  icon?: React.ComponentType<IconBaseProps>;
+  icon: React.ComponentType<IconBaseProps>;
 }
 
 const InputText: React.FC<InputTextProps> = ({ name, icon: Icon, ...rest }) => {
@@ -25,7 +25,7 @@ const InputText: React.FC<InputTextProps> = ({ name, icon: Icon, ...rest }) => {
   return (
     <Container>
       <ContainerText isErrored={!!(meta.touched && meta.error)}>
-        {Icon && <Icon size={25} />}
+        <Icon size={25} />
         <input
           onFocus={handleInputFocus}
           onBlur={handleInputBluer}
