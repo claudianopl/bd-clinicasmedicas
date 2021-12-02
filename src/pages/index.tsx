@@ -46,7 +46,7 @@ const Home: React.FC = () => {
       `id recebido na pagina clinicas (pai) do componente table: ${clickedUserIndex}`
     );
   };
-
+  const isClinic = false;
   const handleOpenTable = (): void => {
     setisTableOpen(currentOpenTable => !currentOpenTable);
   };

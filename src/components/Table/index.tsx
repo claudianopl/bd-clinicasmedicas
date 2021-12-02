@@ -11,9 +11,11 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { FaTrashAlt } from 'react-icons/fa';
+import { AiOutlineEdit } from 'react-icons/ai';
+import { IconButton } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import theme from '../../styles/theme';
-
 import {
   TableFooter,
   Container,
@@ -36,6 +38,7 @@ interface tableComponentProps {
   handleOpenModal: (args: string) => void;
   isLoading?: boolean;
   isOpen: boolean;
+  isClinic?: boolean;
 }
 
 export function TableComponent({
@@ -45,6 +48,7 @@ export function TableComponent({
   handleOpenModal,
   isLoading,
   isOpen,
+  isClinic = false,
 }: tableComponentProps): JSX.Element {
   const [itemOffset, setItemOffset] = useState(null);
   const [currentUsersInPage, setCurrentUsersInPage] = useState<userTypeProps[]>(
@@ -125,6 +129,30 @@ export function TableComponent({
                     <span>{TableItem}</span>
                   </Th>
                 ))}
+                {isClinic ? null : (
+                  <>
+                    <Th
+                      id="thRow"
+                      textTransform="capitalize"
+                      fontSize="20px"
+                      fontWeight="bold"
+                      fontFamily="Nunito"
+                      color={`${theme.colors.white}`}
+                    >
+                      {' '}
+                    </Th>
+                    <Th
+                      id="thRow"
+                      textTransform="capitalize"
+                      fontSize="20px"
+                      fontWeight="bold"
+                      fontFamily="Nunito"
+                      color={`${theme.colors.white}`}
+                    >
+                      {' '}
+                    </Th>
+                  </>
+                )}
               </Tr>
             </Thead>
             <Tbody>
@@ -172,6 +200,38 @@ export function TableComponent({
                           ) : null}
                         </Td>
                       ))}
+                      {isClinic ? null : (
+                        <>
+                          <Td>
+                            <IconButton
+                              size="lg"
+                              variant="none"
+                              outline="none"
+                              aria-label="Search database"
+                              onClick={() =>
+                                console.log(
+                                  `editar o item aqui ${currentUsersInPage[index].id}`
+                                )
+                              }
+                              icon={<AiOutlineEdit />}
+                            />
+                          </Td>
+                          <Td>
+                            <IconButton
+                              size="lg"
+                              variant="none"
+                              outline="none"
+                              aria-label="Search database"
+                              onClick={() =>
+                                console.log(
+                                  `deletar o item aqui ${currentUsersInPage[index].id}`
+                                )
+                              }
+                              icon={<FaTrashAlt />}
+                            />
+                          </Td>
+                        </>
+                      )}
                     </Tr>
                   ))}
                 </>

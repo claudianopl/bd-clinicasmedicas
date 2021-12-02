@@ -6,7 +6,7 @@ export const Container = styled.div`
     background: white;
 
     &:hover {
-      background: ${props => props.theme.colors.aquaMarine};
+      background: rgba(83, 221, 189, 0.25);
       filter: brightness(0.99);
     }
   }
