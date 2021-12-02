@@ -4,7 +4,8 @@ import { BsFillLightningChargeFill } from 'react-icons/bs';
 import { FaClinicMedical, FaMicroscope } from 'react-icons/fa';
 import { MdMedicalServices, MdPeopleOutline } from 'react-icons/md';
 import { ImCalendar } from 'react-icons/im';
-import { IoMdExit } from 'react-icons/io';
+import { IoMdArrowDropdown, IoMdExit } from 'react-icons/io';
+import { FaHandPointLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import Head from 'next/head';
 
@@ -18,6 +19,11 @@ import {
   Center,
   Heading,
   Spacer,
+  useDisclosure,
+  Menu as MenuChakra,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 
 import {
@@ -33,6 +39,8 @@ import {
   ContentChildren,
   ContentMenu,
 } from './styles';
+import ModalCustom from '../ModalCustom';
+import theme from '../../styles/theme';
 
 interface DashboardLayoutProps {
   name: 'clinic' | 'specialty' | 'medical' | 'patients' | 'schedule';
@@ -40,12 +48,22 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+interface WhatFormProps {
+  name: string;
+  form: 0 | 1 | 2 | 3 | 4;
+}
+
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   name,
   titlePage,
   children,
 }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [whatForm, setWahtForm] = useState<WhatFormProps>({
+    name: 'Selecione…',
+    form: 0,
+  });
   const userInput = useRef('');
 
   const handleChange = useCallback(event => {
@@ -112,6 +130,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 borderRadius="38px"
                 bg="#53ddbd"
                 color="white"
+                onClick={onOpen}
                 rightIcon={
                   <BsFillLightningChargeFill color="white" size="18px" />
                 }
@@ -155,7 +174,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               boxShadow: '2px 3px 6px 0 rgba(39, 39, 39, 0.2)',
               background: 'white',
               height: 'calc(100% - 135.94px)',
-              marginTop: '135.94px',
+              marginTop: '136px',
             },
           }}
         >
@@ -202,27 +221,138 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </Nav>
               </Link>
 
-              <div style={{ marginBottom: 400 }}>
-                <Link href="/">
-                  <Nav mt="10rem">
-                    <IoMdExit size={30} />
-                    <a>Sair</a>
-                  </Nav>
-                </Link>
-              </div>
+              <Link href="/">
+                <Nav mt="10rem">
+                  <IoMdExit size={30} />
+                  <a>Sair</a>
+                </Nav>
+              </Link>
             </Flex>
           </Box>
         </Menu>
-        <ContentMenu
-          id="page-wrap"
-          isActive={isOpenMenu}
-          style={{ overflow: 'auto' }}
-        >
+        <ContentMenu id="page-wrap" isActive={isOpenMenu}>
           <ContentChildren style={{ marginTop: '135.94px' }}>
             {children}
           </ContentChildren>
         </ContentMenu>
       </div>
+      <ModalCustom
+        isOpen={isOpen}
+        onClose={onClose}
+        icon={BsFillLightningChargeFill}
+        modalHeader={
+          <Box>
+            <Heading as="h1" mb="4.5px" fontSize="32px" color="white">
+              Inserção rápida
+            </Heading>
+            <Heading color="white" as="h6" mb="14px" size="20px">
+              Selecione abaixo o que deseja inserir no sistema para iniciar:
+            </Heading>
+            <Box>
+              <MenuChakra>
+                <MenuButton
+                  width="300px"
+                  height="64px"
+                  borderRadius="38px"
+                  bg="white"
+                  fontFamily="Nunito"
+                  fontSize="22px"
+                  style={{ letterSpacing: '1.3px' }}
+                  color={theme.colors.aquaMarine}
+                  as={Button}
+                  rightIcon={
+                    <IoMdArrowDropdown
+                      color={theme.colors.aquaMarine}
+                      size={21}
+                      style={{ marginLeft: '75px' }}
+                    />
+                  }
+                >
+                  {whatForm.name}
+                </MenuButton>
+                <MenuList mt="-8px" ml="21px">
+                  {whatForm.form !== 0 && (
+                    <MenuItem
+                      onClick={() =>
+                        setWahtForm({
+                          name: 'Selecione…',
+                          form: 0,
+                        })
+                      }
+                    >
+                      Selecione…
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    onClick={() =>
+                      setWahtForm({
+                        name: 'Clínicas',
+                        form: 1,
+                      })
+                    }
+                  >
+                    Clínicas
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      setWahtForm({
+                        name: 'Especialidades',
+                        form: 2,
+                      })
+                    }
+                  >
+                    Especialidades
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      setWahtForm({
+                        name: 'Médicos',
+                        form: 3,
+                      })
+                    }
+                  >
+                    Médicos
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      setWahtForm({
+                        name: 'Pacientes',
+                        form: 4,
+                      })
+                    }
+                  >
+                    Pacientes
+                  </MenuItem>
+                </MenuList>
+              </MenuChakra>
+            </Box>
+          </Box>
+        }
+        modalBody={
+          <Flex width="100%" alignItems="center" justifyContent="center">
+            {whatForm.form === 0 && (
+              <Flex alignItems="center" flexDirection="column">
+                <FaHandPointLeft
+                  style={{ transform: 'rotate(50deg)' }}
+                  size={271}
+                  color="rgba(39, 39, 39, 0.2)"
+                />
+                <Heading
+                  mt="16px"
+                  textAlign="center"
+                  width="486px"
+                  fontSize="36px"
+                  color="rgba(39, 39, 39, 0.2)"
+                >
+                  Escolha uma opção acima para iniciar a inserção rápida
+                </Heading>
+              </Flex>
+            )}
+          </Flex>
+        }
+      />
     </>
   );
 };
+
+export default DashboardLayout;

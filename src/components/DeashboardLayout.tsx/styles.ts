@@ -139,102 +139,11 @@ export const ContentMenu = styled.div<ContentMenuProps>`
   overflow: auto;
   height: 100%;
   width: 100%;
+  transition: all 0.5s ease 0s;
+  transform: translate3d(0px, 0px, 0px);
+  overflow: 'auto'
   ${props => props.isActive && css`
+    transform: translate3d(25rem, 0px, 0px);
     width: calc(100% - 25rem)
   `}
 `;
-
-// import styled from 'styled-components';
-
-// export const Header = styled.header`
-//   background-color: ${props => props.theme.colors.white};
-//   height: 9.0625rem;
-//   display: grid;
-//   align-items: center;
-//   grid-template-columns: 1fr 2fr 1fr 1fr;
-//   align-content: center;
-
-//   padding: 2.1875rem 3.375rem 2.125rem 4.75rem;
-
-//   > div {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//
-//   }
-// `;
-
-// export const FiSearchIcon = styled(FiSearch)``;
-
-// export const ContainerSearch = styled.div`
-
-//   display: flex;
-//   align-items: center;
-
-//   > svg {
-//     margin-right: 36px;
-//   }
-
-// > input {
-//   flex: 1;
-//   background: transparent;
-//   border: 0;
-//   color: ${props => props.theme.colors.greyish};
-//   font-weight: bold;
-//   text-align: left;
-//   font-size: 22px;
-//   &::placeholder {
-//     color: ${props => props.theme.colors.greyish};
-//   }
-//   &:focus {
-//     box-shadow: 0 0 0 0;
-//     border: 0 none;
-//     outline: 0;
-//   }
-// }
-// `;
-
-// export const ContainerQuickInsert = styled.div`
-//   margin-left: auto;
-
-//   > button {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     width: auto;
-//     padding: 21.7px 38.1px 21.7px 34.9px;
-// border-radius: 38px;
-// border: 0;
-// box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.23);
-// background: ${props => props.theme.colors.aquaMarine};
-// &:focus {
-//   border: 0 none;
-//   outline: 0;
-// }
-
-//     > span {
-//       display: block;
-//       font-family: 'Work Sans', sans-serif;
-
-//       color: ${props => props.theme.colors.white};
-//       margin-right: 13px;
-//     }
-
-//     > svg {
-//       color: ${props => props.theme.colors.white};
-//     }
-//   }
-// `;
-
-// export const ContainerUserName = styled.div`
-//   margin-left: auto;
-
-//   h1 {
-//     font-family: 'Work Sans', sans-serif;
-//     font-size: 27px;
-//     font-weight: bold;
-//     letter-spacing: 1.35px;
-//     text-align: left;
-//     color: ${props => props.theme.colors.aquaMarine};
-//   }
-// `;
