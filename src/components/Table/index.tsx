@@ -23,19 +23,13 @@ import {
   FooterButtonsWrapper,
 } from './styles';
 
-type userTypeProps = {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-};
-
 interface tableComponentProps {
   objectProps: string[];
   headerTable: string[];
-  data: userTypeProps[];
-  handleOpenModal: (args: string) => void;
+  data: any[];
+  handleOpenModal?: (args: string) => void;
+  handleModalEdic?: (args: string) => void;
+  handleDelete?: (args: string) => void;
   isLoading?: boolean;
   isOpen: boolean;
   isClinic?: boolean;
@@ -46,14 +40,14 @@ export function TableComponent({
   objectProps,
   headerTable,
   handleOpenModal,
+  handleModalEdic,
+  handleDelete,
   isLoading,
   isOpen,
-  isClinic = false,
+  isClinic = true,
 }: tableComponentProps): JSX.Element {
   const [itemOffset, setItemOffset] = useState(null);
-  const [currentUsersInPage, setCurrentUsersInPage] = useState<userTypeProps[]>(
-    []
-  );
+  const [currentUsersInPage, setCurrentUsersInPage] = useState([]);
 
   const usersPerPage = 4;
   const maxNumberOfPages = Math.ceil(data.length / usersPerPage);
@@ -91,7 +85,7 @@ export function TableComponent({
   }
 
   function refinedValue(userObject: string): string {
-    if (userObject && userObject.length > 26) {
+    if (userObject.length > 26) {
       return userObject.substring(0, 26) + threeDotsAtEnd;
     }
 
@@ -102,7 +96,7 @@ export function TableComponent({
   }, [itemOffset, data]);
   return (
     <Collapse in={isOpen} animateOpacity>
-      <Container>
+      <Container isClinic={isClinic}>
         <p>
           Aqui você pode visualizar as clínicas existentes neste banco de dados,
           bem como, atualizar ou exluir-las!
@@ -129,7 +123,7 @@ export function TableComponent({
                     <span>{TableItem}</span>
                   </Th>
                 ))}
-                {isClinic ? null : (
+                {!isClinic && (
                   <>
                     <Th
                       id="thRow"
@@ -181,9 +175,10 @@ export function TableComponent({
                       {objectProps.map(props => (
                         <Td
                           id="thHoverChild"
-                          cursor="pointer"
+                          cursor={isClinic ? 'pointer' : 'default'}
                           onClick={() =>
-                            handleOpenModal(currentUsersInPage[index][0])
+                            isClinic &&
+                            handleOpenModal(currentUsersInPage[index])
                           }
                           height="81px"
                           paddingTop="32px"
@@ -200,35 +195,35 @@ export function TableComponent({
                           ) : null}
                         </Td>
                       ))}
-                      {isClinic ? null : (
+                      {!isClinic && (
                         <>
                           <Td>
-                            <IconButton
-                              size="lg"
-                              variant="none"
-                              outline="none"
-                              aria-label="Search database"
-                              onClick={() =>
-                                console.log(
-                                  `editar o item aqui ${currentUsersInPage[index].id}`
-                                )
-                              }
-                              icon={<AiOutlineEdit />}
-                            />
+                            {currentUsersInPage[index] && (
+                              <IconButton
+                                size="lg"
+                                variant="none"
+                                outline="none"
+                                aria-label="Search database"
+                                onClick={() =>
+                                  handleModalEdic(currentUsersInPage[index])
+                                }
+                                icon={<AiOutlineEdit />}
+                              />
+                            )}
                           </Td>
                           <Td>
-                            <IconButton
-                              size="lg"
-                              variant="none"
-                              outline="none"
-                              aria-label="Search database"
-                              onClick={() =>
-                                console.log(
-                                  `deletar o item aqui ${currentUsersInPage[index].id}`
-                                )
-                              }
-                              icon={<FaTrashAlt />}
-                            />
+                            {currentUsersInPage[index] && (
+                              <IconButton
+                                size="lg"
+                                variant="none"
+                                outline="none"
+                                aria-label="Search database"
+                                onClick={() =>
+                                  handleDelete(currentUsersInPage[index])
+                                }
+                                icon={<FaTrashAlt />}
+                              />
+                            )}
                           </Td>
                         </>
                       )}

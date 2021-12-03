@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ImEye } from 'react-icons/im';
-import { IoMdRefresh } from 'react-icons/io';
 import { IoAddSharp } from 'react-icons/io5';
 
+import { FaClinicMedical } from 'react-icons/fa';
+import { Heading, Box } from '@chakra-ui/react';
 import { ClinicaViewButton } from '../components/ClinicaViewButton';
-import { server } from '../mocks/clinic';
 
 import { TableComponent } from '../components/Table';
 import theme from '../styles/theme';
@@ -13,10 +12,17 @@ import { Container, Content, ContentBody } from '../styles/pages/home';
 import { DashboardLayout } from '../components/DeashboardLayout.tsx';
 import CreateClinical from '../components/CreateClinical';
 import ContentHeaderDashboard from '../components/ContentHeaderDashboard';
-import CreateSpecialty from '../components/CreateEspecialy';
-import CreateMedic from '../components/CreateMedic';
-import CreatePatient from '../components/CreatePatient';
-import { getAllClinics } from '../Api/Services/Clinic';
+import {
+  createClinic,
+  getAllClinics,
+  getOneClinic,
+} from '../Api/Services/Clinic';
+import ModalCustom from '../components/ModalCustom';
+
+interface oneClinicProps {
+  clinicInfo: any;
+  medicInfo: any;
+}
 
 const Home: React.FC = () => {
   const [users, setUsers] = useState([]);
@@ -24,6 +30,8 @@ const Home: React.FC = () => {
   const [isTableOpen, setisTableOpen] = useState(false);
   const [isInsertionOpen, setIsInsertionOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [openModalDetailsClinic, setOpenModalDetailsClinic] = useState(false);
+  const [oneClinic, setOneClinic] = useState<oneClinicProps>({});
 
   const getData = async (): Promise<void> => {
     setIsLoading(true);
@@ -41,12 +49,17 @@ const Home: React.FC = () => {
     getData();
   }, []);
 
-  const handleOpenModal = (clickedUserIndex: string): void => {
-    console.log(
-      `id recebido na pagina clinicas (pai) do componente table: ${clickedUserIndex}`
-    );
+  const handleOpenModal = async (object): Promise<void> => {
+    const response = await getOneClinic(object.CodCli);
+
+    setOneClinic({
+      clinicInfo: object,
+      medicInfo: response,
+    });
+
+    setOpenModalDetailsClinic(current => !current);
   };
-  const isClinic = false;
+
   const handleOpenTable = (): void => {
     setisTableOpen(currentOpenTable => !currentOpenTable);
   };
@@ -55,53 +68,97 @@ const Home: React.FC = () => {
     setIsInsertionOpen(currentInsertionOpen => !currentInsertionOpen);
   };
 
-  const handleCreateClinical = useCallback(values => {
-    console.log('values abaixo');
-    console.log(values);
+  const handleCreateClinical = useCallback(async values => {
+    const object = {
+      nomeCli: values.clinicName,
+      endereco: values.address,
+      telefone: values.phone,
+      email: values.email,
+    };
+
+    try {
+      const response = await createClinic(object);
+      getData();
+    } catch {
+      console.log('error');
+    }
   }, []);
 
-  const headerTable = ['Código', 'Nome', 'Endereço', 'Telefone', 'E-mail'];
-  const objectProps = ['id', 'name', 'address', 'phone', 'email'];
+  const headerTable = [
+    'Código',
+    'Email',
+    'Endereço',
+    'Nome da cliníca',
+    'Telefone',
+  ];
+  const objectProps = ['CodCli', 'NomeCli', 'Endereco', 'Telefone', 'Email'];
 
   return (
-    <DashboardLayout name="clinic" titlePage="Clínica">
-      <Container>
-        <Content>
-          <ContentHeaderDashboard
-            title="Clínicas"
-            getData={getData}
-            handleOpenTable={handleOpenTable}
-          />
-          <ContentBody>
-            <>
-              <TableComponent
-                isOpen={isTableOpen}
-                isLoading={isLoading}
-                data={users}
-                objectProps={objectProps}
-                headerTable={headerTable}
-                handleOpenModal={handleOpenModal}
-              />
-            </>
-
-            <ClinicaViewButton
-              icon={
-                <IoAddSharp size={30} color={`${theme.colors.darkGreenBlue}`} />
-              }
-              text="Inserção"
-              onClickFunction={handleOpenInsertionForm}
+    <>
+      <DashboardLayout name="clinic" titlePage="Clínica">
+        <Container>
+          <Content>
+            <ContentHeaderDashboard
+              title="Clínicas"
+              getData={getData}
+              handleOpenTable={handleOpenTable}
             />
+            <ContentBody>
+              <>
+                <TableComponent
+                  isOpen={isTableOpen}
+                  isLoading={isLoading}
+                  data={users}
+                  objectProps={objectProps}
+                  headerTable={headerTable}
+                  handleOpenModal={handleOpenModal}
+                />
+              </>
 
-            <>
-              <CreateClinical
-                handleSubmit={handleCreateClinical}
-                isOpen={isInsertionOpen}
+              <ClinicaViewButton
+                icon={
+                  <IoAddSharp
+                    size={30}
+                    color={`${theme.colors.darkGreenBlue}`}
+                  />
+                }
+                text="Inserção"
+                onClickFunction={handleOpenInsertionForm}
               />
-            </>
-          </ContentBody>
-        </Content>
-      </Container>
-    </DashboardLayout>
+
+              <>
+                <CreateClinical
+                  handleSubmit={handleCreateClinical}
+                  isOpen={isInsertionOpen}
+                />
+              </>
+            </ContentBody>
+          </Content>
+        </Container>
+      </DashboardLayout>
+      <ModalCustom
+        isOpen={openModalDetailsClinic}
+        onClose={() => setOpenModalDetailsClinic(false)}
+        icon={FaClinicMedical}
+        modalHeader={
+          <Box>
+            <Heading as="h1" fontSize="36px" color="white" mb="4.5px">
+              {oneClinic.clinicInfo && oneClinic.clinicInfo.NomeCli}
+            </Heading>
+            <Heading as="h6" fontSize="20px" color="white" mb="9.5px">
+              {oneClinic.clinicInfo && oneClinic.clinicInfo.Endereco}
+            </Heading>
+            <Heading as="h6" fontSize="19px" color="white" mb="9.5px">
+              {oneClinic.clinicInfo && oneClinic.clinicInfo.Email}
+            </Heading>
+            <Heading as="h6" fontSize="19px" color="white" mb="9.5px">
+              {oneClinic.clinicInfo && oneClinic.clinicInfo.Telefone}
+            </Heading>
+          </Box>
+        }
+        modalBody={<h1>dadasdasd</h1>}
+      />
+    </>
   );
 };
 

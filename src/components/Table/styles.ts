@@ -1,13 +1,21 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface ContainerProps {
+  isClinic: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   #thHoverFather {
     transition: 0.3s;
     background: white;
 
     &:hover {
-      background: rgba(83, 221, 189, 0.25);
-      filter: brightness(0.99);
+      ${props =>
+    props.isClinic &&
+    css`
+          background: rgba(83, 221, 189, 0.25);
+          filter: brightness(0.99);
+        `}
     }
   }
 

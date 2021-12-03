@@ -5,6 +5,7 @@ import { FiMail, FiPhone } from 'react-icons/fi';
 import { IoLocationOutline } from 'react-icons/io5';
 import { Collapse } from '@chakra-ui/react';
 import InputText from '../InputText';
+import InputMask from '../InputMask';
 import { Container, ButtonSubmit } from './styles';
 
 import { schema } from './schema';
@@ -51,7 +52,8 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
                   />
                 </GridItem>
                 <GridItem colSpan={3} mr={3}>
-                  <InputText
+                  <InputMask
+                    mask="99999999999"
                     name="phone"
                     icon={FiPhone}
                     placeholder="Telefone"

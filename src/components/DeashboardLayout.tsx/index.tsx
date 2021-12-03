@@ -247,13 +247,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </Link>
 
               <Link href="/">
-                <Nav isActive={name === 'schedule'} mt="1rem">
-                  <ImCalendar size={30} />
-                  <a>Agendas</a>
-                </Nav>
-              </Link>
-
-              <Link href="/">
                 <Nav mt="10rem">
                   <IoMdExit size={30} />
                   <a>Sair</a>

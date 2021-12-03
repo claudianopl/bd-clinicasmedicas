@@ -10,20 +10,31 @@ import { MdMedicalServices } from 'react-icons/md';
 
 import { Collapse } from '@chakra-ui/react';
 import InputText from '../InputText';
+import InputMask from '../InputMask';
 import { Container, ButtonSubmit, selectChildrenStyles } from './styles';
 
 import { schema } from './schema';
 
 interface CreateClinicalProps {
-  handleSubmit: (values) => void;
+  handleSubmit: (values, any) => void;
   isOpen: boolean;
   quickInsert?: boolean;
+  initialValue: {
+    medicName: string;
+    specCode: string;
+    phone: string;
+    email: string;
+    gender: string;
+  };
+  isUpdate?: boolean;
 }
 
 const CreateMedic: React.FC<CreateClinicalProps> = ({
   handleSubmit,
   isOpen,
   quickInsert = false,
+  initialValue,
+  isUpdate = false,
 }) => {
   return (
     <Collapse in={isOpen} animateOpacity>
@@ -32,18 +43,13 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
       )}
       <Container quickInsert={quickInsert}>
         <Formik
-          initialValues={{
-            medicName: '',
-            specCode: '',
-            phone: '',
-            email: '',
-            gender: 'masculino',
-          }}
+          enableReinitialize
+          initialValues={initialValue}
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={schema}
-          onSubmit={values => {
-            handleSubmit(values);
+          onSubmit={(values, { resetForm }) => {
+            handleSubmit(values, resetForm);
           }}
         >
           {formikProps => (
@@ -85,7 +91,8 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
                 </GridItem>
 
                 <GridItem colSpan={3}>
-                  <InputText
+                  <InputMask
+                    mask="99999999999"
                     name="phone"
                     icon={FiPhone}
                     placeholder="Telefone"
@@ -111,7 +118,7 @@ const CreateMedic: React.FC<CreateClinicalProps> = ({
                           )
                         }
                       >
-                        Inserir
+                        {isUpdate ? 'Atualizar' : 'Inserir'}
                       </ButtonSubmit>
                     </Box>
                   </Flex>

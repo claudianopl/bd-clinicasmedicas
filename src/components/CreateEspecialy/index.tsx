@@ -12,15 +12,23 @@ import { Container, ButtonSubmit } from './styles';
 import { schema } from './schema';
 
 interface CreateClinicalProps {
-  handleSubmit: (values) => void;
+  handleSubmit: (values, any) => void;
   isOpen: boolean;
   quickInsert?: boolean;
+  initialValue: {
+    specCode: string;
+    specName: string;
+    specDescription: string;
+  };
+  isUpdate?: boolean;
 }
 
 const CreateSpecialty: React.FC<CreateClinicalProps> = ({
   handleSubmit,
   isOpen,
   quickInsert = false,
+  initialValue,
+  isUpdate = false,
 }) => {
   return (
     <Collapse in={isOpen} animateOpacity>
@@ -29,16 +37,13 @@ const CreateSpecialty: React.FC<CreateClinicalProps> = ({
       )}
       <Container quickInsert={quickInsert}>
         <Formik
-          initialValues={{
-            specCode: '',
-            specName: '',
-            specDescription: '',
-          }}
+          enableReinitialize
+          initialValues={initialValue}
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={schema}
-          onSubmit={values => {
-            handleSubmit(values);
+          onSubmit={(values, { resetForm }) => {
+            handleSubmit(values, resetForm);
           }}
         >
           {formikProps => (
@@ -46,6 +51,7 @@ const CreateSpecialty: React.FC<CreateClinicalProps> = ({
               <Grid w="100%" templateColumns="repeat(6, 1fr)" gap={6}>
                 <GridItem colSpan={3}>
                   <InputText
+                    disabled={isUpdate}
                     name="specCode"
                     icon={HiOutlineHashtag}
                     placeholder="Código da especialidade"
@@ -80,7 +86,7 @@ const CreateSpecialty: React.FC<CreateClinicalProps> = ({
                           )
                         }
                       >
-                        Inserir
+                        {isUpdate ? 'Atualizar' : 'Inserir'}
                       </ButtonSubmit>
                     </Box>
                   </Flex>
