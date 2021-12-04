@@ -85,7 +85,7 @@ export function TableComponent({
   }
 
   function refinedValue(userObject: string): string {
-    if (userObject.length > 26) {
+    if (userObject && userObject.length > 26) {
       return userObject.substring(0, 26) + threeDotsAtEnd;
     }
 

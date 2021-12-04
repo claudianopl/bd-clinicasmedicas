@@ -66,6 +66,7 @@ const Patients: React.FC = () => {
     try {
       const response = await createMedic(object);
       resetForm();
+      getData();
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -143,7 +144,7 @@ const Patients: React.FC = () => {
 
   return (
     <>
-      <DashboardLayout name="medical" titlePage="Médicos">
+      <DashboardLayout getData={getData} name="medical" titlePage="Médicos">
         <Container>
           <Content>
             <ContentHeaderDashboard

@@ -68,7 +68,7 @@ const Home: React.FC = () => {
     setIsInsertionOpen(currentInsertionOpen => !currentInsertionOpen);
   };
 
-  const handleCreateClinical = useCallback(async values => {
+  const handleCreateClinical = useCallback(async (values, resetForm) => {
     const object = {
       nomeCli: values.clinicName,
       endereco: values.address,
@@ -79,6 +79,7 @@ const Home: React.FC = () => {
     try {
       const response = await createClinic(object);
       getData();
+      resetForm();
     } catch {
       console.log('error');
     }
@@ -95,7 +96,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <DashboardLayout name="clinic" titlePage="Clínica">
+      <DashboardLayout getData={getData} name="clinic" titlePage="Clínica">
         <Container>
           <Content>
             <ContentHeaderDashboard

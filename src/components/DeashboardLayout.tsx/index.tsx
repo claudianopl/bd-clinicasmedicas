@@ -45,11 +45,16 @@ import CreateClinical from '../CreateClinical';
 import CreateEspecialy from '../CreateEspecialy';
 import CreateMedic from '../CreateMedic';
 import CreatePatient from '../CreatePatient';
+import { createClinic } from '../../Api/Services/Clinic';
+import { createSpecialty } from '../../Api/Services/Specialty';
+import { createMedic } from '../../Api/Services/Medic';
+import { createPatients } from '../../Api/Services/Patient';
 
 interface DashboardLayoutProps {
   name: 'clinic' | 'specialty' | 'medical' | 'patients' | 'schedule';
   titlePage: string;
   children: React.ReactNode;
+  getData: () => void;
 }
 
 interface WhatFormProps {
@@ -61,6 +66,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   name,
   titlePage,
   children,
+  getData,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
@@ -78,21 +84,88 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     console.log(userInput);
   }, []);
 
-  const handleCreateClinical = useCallback(values => {
-    console.log(values);
-  }, []);
+  const handleCreateClinical = useCallback(
+    async (values, resetForm) => {
+      const object = {
+        nomeCli: values.clinicName,
+        endereco: values.address,
+        telefone: values.phone,
+        email: values.email,
+      };
 
-  const handleCreateEspecialy = useCallback(values => {
-    console.log(values);
-  }, []);
+      try {
+        const response = await createClinic(object);
+        resetForm();
+        getData();
+      } catch {
+        console.log('error');
+      }
+    },
+    [getData]
+  );
 
-  const handleCreateMedic = useCallback(values => {
-    console.log(values);
-  }, []);
+  const handleCreateEspecialy = useCallback(
+    async (values, resetForm) => {
+      try {
+        const object = {
+          codEspec: values.specCode,
+          nomeEspec: values.specName,
+          descricao: values.specDescription,
+        };
 
-  const handleCreatePatient = useCallback(values => {
-    console.log(values);
-  }, []);
+        await createSpecialty(object);
+        resetForm();
+        getData();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [getData]
+  );
+
+  const handleCreateMedic = useCallback(
+    async (values, resetForm) => {
+      const object = {
+        nomeMed: values.medicName,
+        genero: values.gender === 'Masculino' ? 'M' : 'F',
+        telefone: values.phone,
+        email: values.email,
+        codEspec: values.specCode,
+      };
+
+      try {
+        const response = await createMedic(object);
+        resetForm();
+        getData();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [getData]
+  );
+
+  const handleCreatePatient = useCallback(
+    async (values, resetForm) => {
+      const [day, month, year] = values.birthDate.split('/');
+      const object = {
+        cpfPac: values.cpf,
+        nomePac: values.patientName,
+        dataNascimento: `${year}-${month}-${day}`,
+        genero: values.gender === 'Masculino' ? 'M' : 'F',
+        telefone: values.phone,
+        email: values.email,
+      };
+
+      try {
+        await createPatients(object);
+        resetForm();
+        getData();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [getData]
+  );
 
   return (
     <>
@@ -101,7 +174,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </Head>
       <Header>
         <Grid h="100%" templateColumns="repeat(12, 1fr)">
-          <GridItem colSpan={{ sm: 5, md: 5, lg: 4 }} marginRight="7vw">
+          <GridItem colSpan={{ sm: 6, md: 6, lg: 5 }} marginRight="7vw">
             <Flex alignItems="center" w="100%" h="100%">
               <Flex
                 height="100%"
@@ -154,7 +227,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </Box>
             </ContainerSearch>
           </GridItem>
-          <GridItem colSpan={{ sm: 5, md: 5, lg: 3 }} marginRight="3vw">
+          <GridItem colSpan={{ sm: 6, md: 6, lg: 3 }} marginRight="3vw">
             <Flex h="100%" w="100%" justifyContent="end" alignItems="center">
               <ButtonComponents
                 maxW="294px"
@@ -171,21 +244,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   Inserção rápida
                 </P>
               </ButtonComponents>
-            </Flex>
-          </GridItem>
-          <GridItem colSpan={{ sm: 2, md: 2, lg: 1 }}>
-            <Flex w="100%" h="100%" justifyContent="end" alignItems="center">
-              <Heading
-                as="h3"
-                fontSize="1.6875rem"
-                fontFamily="Work Sans"
-                color="#53ddbd"
-                style={{
-                  letterSpacing: '1.35px',
-                }}
-              >
-                Olá, Nome!
-              </Heading>
             </Flex>
           </GridItem>
         </Grid>
@@ -243,13 +301,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 <Nav isActive={name === 'patients'} mt="1rem">
                   <MdPeopleOutline size={30} />
                   <a>Pacientes</a>
-                </Nav>
-              </Link>
-
-              <Link href="/">
-                <Nav mt="10rem">
-                  <IoMdExit size={30} />
-                  <a>Sair</a>
                 </Nav>
               </Link>
             </Flex>
@@ -393,6 +444,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {whatForm.form === 2 && (
               <Box width="100%">
                 <CreateEspecialy
+                  initialValue={{
+                    specCode: '',
+                    specName: '',
+                    specDescription: '',
+                  }}
                   quickInsert
                   handleSubmit={handleCreateEspecialy}
                   isOpen
@@ -402,6 +458,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {whatForm.form === 3 && (
               <Box width="100%">
                 <CreateMedic
+                  initialValue={{
+                    medicName: '',
+                    specCode: '',
+                    phone: '',
+                    email: '',
+                    gender: 'masculino',
+                  }}
                   quickInsert
                   handleSubmit={handleCreateMedic}
                   isOpen
@@ -411,6 +474,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {whatForm.form === 4 && (
               <Box width="100%">
                 <CreatePatient
+                  initialValue={{
+                    patientName: '',
+                    birthDate: '',
+                    phone: '',
+                    email: '',
+                    gender: 'masculino',
+                    cpf: '',
+                  }}
                   quickInsert
                   handleSubmit={handleCreatePatient}
                   isOpen

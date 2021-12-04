@@ -111,7 +111,11 @@ const Specialty: React.FC = () => {
 
   return (
     <>
-      <DashboardLayout name="specialty" titlePage="Especialidade">
+      <DashboardLayout
+        getData={getData}
+        name="specialty"
+        titlePage="Especialidade"
+      >
         <Container>
           <Content>
             <ContentHeaderDashboard

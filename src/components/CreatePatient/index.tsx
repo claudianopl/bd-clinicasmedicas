@@ -16,15 +16,26 @@ import { schema } from './schema';
 import TextMask from '../InputMask';
 
 interface CreateClinicalProps {
-  handleSubmit: (values) => void;
+  handleSubmit: (values, any) => void;
   isOpen: boolean;
   quickInsert?: boolean;
+  initialValue: {
+    patientName: string;
+    birthDate: string;
+    phone: string;
+    email: string;
+    gender: string;
+    cpf: string;
+  };
+  isUpdate?: boolean;
 }
 
 const CreatePatient: React.FC<CreateClinicalProps> = ({
   handleSubmit,
   isOpen,
   quickInsert = false,
+  initialValue,
+  isUpdate = false,
 }) => {
   return (
     <Collapse in={isOpen} animateOpacity>
@@ -33,19 +44,13 @@ const CreatePatient: React.FC<CreateClinicalProps> = ({
       )}
       <Container quickInsert={quickInsert}>
         <Formik
-          initialValues={{
-            patientName: '',
-            birthDate: '',
-            phone: '',
-            email: '',
-            gender: 'masculino',
-            cpf: '',
-          }}
+          enableReinitialize
+          initialValues={initialValue}
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={schema}
-          onSubmit={values => {
-            handleSubmit(values);
+          onSubmit={(values, { resetForm }) => {
+            handleSubmit(values, resetForm);
           }}
         >
           {formikProps => (
@@ -58,7 +63,7 @@ const CreatePatient: React.FC<CreateClinicalProps> = ({
                     placeholder="Nome do paciente"
                   />
                 </GridItem>
-                <GridItem colSpan={2} mr={3}>
+                <GridItem colSpan={2}>
                   <TextMask
                     icon={FiMail}
                     mask="99/99/9999"
@@ -98,10 +103,11 @@ const CreatePatient: React.FC<CreateClinicalProps> = ({
                   />
                 </GridItem>
 
-                <GridItem colSpan={2} mr={3}>
+                <GridItem colSpan={2}>
                   <TextMask
+                    disabled={isUpdate}
                     icon={FiMail}
-                    mask="999.999.999.99"
+                    mask="99999999999"
                     name="cpf"
                     placeholder="Insira o seu CPF"
                   />
@@ -127,7 +133,7 @@ const CreatePatient: React.FC<CreateClinicalProps> = ({
                           )
                         }
                       >
-                        Inserir
+                        {isUpdate ? 'Atualizar' : 'Inserir'}
                       </ButtonSubmit>
                     </Box>
                   </Flex>

@@ -11,7 +11,7 @@ import { Container, ButtonSubmit } from './styles';
 import { schema } from './schema';
 
 interface CreateClinicalProps {
-  handleSubmit: (values) => void;
+  handleSubmit: (values, any) => void;
   isOpen: boolean;
   quickInsert?: boolean;
 }
@@ -37,8 +37,8 @@ const CreateClinical: React.FC<CreateClinicalProps> = ({
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={schema}
-          onSubmit={values => {
-            handleSubmit(values);
+          onSubmit={(values, { resetForm }) => {
+            handleSubmit(values, resetForm);
           }}
         >
           {formikProps => (
